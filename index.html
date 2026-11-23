@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio Interactivo de TIC - Santos Alejandra</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fde7f3; --ink:#3b2a4a; --card:#ffffff; --mut:#7a6a8f;
+  --lil:#ecdcff; --lil2:#d7b9f5; --lil3:#9b72d0; --pink:#ffc6de; --pink2:#ff9ec6;
+  --mint:#d9f5e7; --blue:#cfe8ff; --cream:#fff8fd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Quicksand',system-ui,sans-serif;font-weight:600;color:var(--ink);background:var(--bg);
+  background-image:linear-gradient(rgba(155,114,208,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(155,114,208,.10) 1px,transparent 1px);
+  background-size:28px 28px;min-height:100vh}
+a{color:inherit}
+button,input,textarea{font-family:inherit}
+
+/* --- ventanas estilo sticker --- */
+.win{background:var(--card);border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink);overflow:hidden;margin-bottom:26px}
+.win-bar{background:var(--lil);padding:8px 12px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--ink);font-family:'Fredoka',sans-serif;font-weight:600;font-size:.98rem}
+.dots{display:flex;gap:6px}
+.dots span{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--ink)}
+.x-btn{margin-left:auto;width:24px;height:24px;border:2px solid var(--ink);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+.chrome{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-bottom:3px solid var(--ink)}
+.chrome button{width:30px;height:30px;border:2px solid var(--ink);border-radius:10px;background:var(--cream);cursor:pointer;font-size:1rem;font-weight:700;color:var(--ink)}
+.chrome button:hover{background:var(--pink)}
+.addr{flex:1;background:var(--lil);border:2px solid var(--ink);border-radius:999px;padding:5px 14px;font-size:.85rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.heart-btn{width:34px!important;height:30px;border-radius:999px!important;font-size:1.05rem!important}
+.heart-btn.on{background:var(--pink2)!important}
+.win-body{padding:20px}
+.win h2{font-family:'Fredoka',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.win h2 small{font-family:'Quicksand',sans-serif;font-weight:600;color:var(--mut);font-size:.8rem}
+
+/* --- barra lateral: reproductor + carpetas --- */
+#side{width:300px;position:fixed;top:0;bottom:0;left:0;padding:16px;z-index:50;display:flex;flex-direction:column;gap:14px}
+.player{background:var(--card);border:3px solid var(--ink);border-radius:22px;padding:14px;box-shadow:5px 5px 0 var(--ink)}
+.brand{font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:600;color:var(--ink);text-align:center;margin-bottom:10px}
+.brand small{display:block;font-family:'Quicksand',sans-serif;color:var(--mut);font-size:.78rem}
+.ctrl{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
+.ctrl button{width:42px;height:42px;border-radius:50%;border:3px solid var(--ink);background:var(--pink);font-size:1rem;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--ink);color:var(--ink)}
+.ctrl button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.pbar{height:16px;background:#fff;border:3px solid var(--ink);border-radius:999px;overflow:hidden}
+.pbar div{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--lil2) 0 8px,var(--pink2) 8px 16px);transition:width .4s}
+#prog-txt{text-align:center;font-size:.8rem;margin-top:6px;color:var(--mut)}
+.search{background:#fff;border:3px solid var(--ink);border-radius:999px;padding:8px 14px;outline:none;font-size:.9rem;width:100%}
+#lista-wrap{background:var(--card);border:3px solid var(--ink);border-radius:22px;box-shadow:5px 5px 0 var(--ink);flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+#lista{overflow-y:auto;padding:8px 12px 16px;flex:1}
+.u-tit{font-family:'Fredoka',sans-serif;font-size:.95rem;font-weight:600;margin:12px 4px 6px;display:flex;align-items:center;gap:8px}
+.u-tit i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);display:inline-block}
+#lista a{display:flex;justify-content:space-between;gap:8px;padding:7px 12px;border-radius:999px;text-decoration:none;font-size:.9rem;margin-bottom:4px;border:2px solid transparent}
+#lista a:hover{background:var(--cream);border-color:var(--ink)}
+#lista a.act{background:var(--lil2);border-color:var(--ink)}
+#lista .ok{color:#d6336c;font-weight:700}
+.side-links{display:flex;gap:8px}
+.side-links a{flex:1;text-align:center;text-decoration:none;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:6px;font-size:.85rem;font-family:'Fredoka',sans-serif;font-weight:600;box-shadow:2px 2px 0 var(--ink)}
+
+/* --- contenido --- */
+#main{margin-left:335px;padding:26px 30px 60px;min-width:0}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+#menu-btn{display:none;background:var(--pink);border:3px solid var(--ink);border-radius:999px;padding:6px 14px;font-family:'Fredoka',sans-serif;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.notch{margin:0 auto;width:220px;height:34px;background:var(--ink);border-radius:0 0 18px 18px;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:.9rem;letter-spacing:.06em}
+
+.hero{display:grid;grid-template-columns:1.05fr .95fr;background:linear-gradient(160deg,#fff 0%,var(--lil) 100%)}
+.hero .txt{padding:26px 28px}
+.chip{display:inline-block;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:700;margin-bottom:10px}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2.1rem;font-weight:600;line-height:1.1;margin-bottom:10px}
+.hero p{font-size:1.02rem;line-height:1.6}
+.hero .art{padding:18px;border-left:3px solid var(--ink);background:var(--cream);display:flex;align-items:center;justify-content:center}
+.hero .art svg{width:100%;height:auto;max-width:300px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.flips{display:grid;gap:12px}
+.flip{height:96px;perspective:900px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;border-radius:18px}
+.flip.on .flip-in{transform:rotateX(180deg)}
+.f-front,.f-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;border:3px solid var(--ink)}
+.f-front{background:var(--c,var(--lil));font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:600}
+.f-front span{font-family:'Quicksand',sans-serif;font-size:.78rem;font-weight:700;opacity:.8}
+.f-back{transform:rotateX(180deg);background:#fff;font-size:.95rem}
+
+.galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.gi{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;background:var(--cream);border:3px dashed var(--ink);display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:.85rem;text-align:center;padding:8px}
+.gi img{width:100%;height:100%;object-fit:cover}
+.gi button{position:absolute;top:6px;right:6px;background:#fff;border:2px solid var(--ink);border-radius:50%;width:26px;height:26px;cursor:pointer;font-weight:700}
+.acciones{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.acciones input{flex:1;min-width:180px;padding:8px 14px;border-radius:999px;border:3px solid var(--ink);background:#fff;outline:none;font-size:.9rem;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--pink);color:var(--ink);border:3px solid var(--ink);border-radius:999px;padding:7px 16px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.92rem;cursor:pointer;text-decoration:none;box-shadow:3px 3px 0 var(--ink)}
+.btn:hover{background:var(--pink2)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.blue{background:var(--blue)}
+.btn.blue:hover{background:#b7dbff}
+.btn.mint{background:var(--mint)}
+.btn.sm{padding:5px 12px;font-size:.85rem}
+.video{position:relative;padding-bottom:56.25%;height:0;border-radius:18px;overflow:hidden;border:3px solid var(--ink);margin-bottom:10px;background:var(--cream)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vidT{font-size:.85rem;color:var(--mut);margin-bottom:12px}
+.vacio{color:var(--mut);font-size:.92rem;margin-bottom:12px;padding:18px;text-align:center;border:3px dashed var(--ink);border-radius:18px;background:var(--cream)}
+.fuentes{list-style:none;display:grid;gap:8px;margin-bottom:12px}
+.fuentes a{display:block;background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:8px 12px;text-decoration:none;font-size:.88rem;word-break:break-all}
+.fuentes a:hover{background:var(--mint)}
+
+.nav-tema{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 22px}
+.nav-tema a{font-family:'Fredoka',sans-serif;font-weight:600;color:var(--ink);text-decoration:none;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;box-shadow:3px 3px 0 var(--ink)}
+
+/* diálogo estilo "Are you sure" */
+.dialog{background:#fff;border:3px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink);max-width:460px;margin:0 auto 26px;overflow:hidden;text-align:center}
+.dialog .dt{background:var(--lil2);padding:14px;font-family:'Fredoka',sans-serif;font-size:1.15rem;border-bottom:3px solid var(--ink)}
+.dialog .db{padding:16px;display:grid;gap:10px}
+.dialog button{background:var(--pink);border:3px solid var(--ink);border-radius:12px;padding:8px;font-family:'Fredoka',sans-serif;font-size:1rem;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+
+.u-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.u-card{border:3px solid var(--ink);border-radius:22px;padding:20px;text-decoration:none;box-shadow:6px 6px 0 var(--ink);background:var(--c);transition:transform .1s;position:relative;overflow:hidden}
+.u-card:hover{transform:translate(-2px,-2px)}
+.u-card h3{font-family:'Fredoka',sans-serif;font-size:1.25rem;font-weight:600;margin-bottom:4px}
+.u-card p{font-size:.92rem}
+.u-card .folder-tab{position:absolute;top:-3px;left:18px;width:90px;height:16px;background:var(--c);border:3px solid var(--ink);border-bottom:none;border-radius:10px 10px 0 0}
+
+.cover{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center}
+.cover .datos{display:grid;gap:10px}
+.cover .datos div{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:10px 14px}
+.drow{display:flex;align-items:center;gap:12px;font-weight:600;box-shadow:3px 4px 0 var(--ink);transition:transform .2s}
+.drow:hover{transform:translateY(-2px) rotate(0deg)!important}
+.dico{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--ink);display:grid;place-items:center;font-size:1.25rem}
+.dcol{display:grid;gap:14px;justify-items:center}
+.bubble{position:relative;width:100%;background:#fff;border:2.5px solid var(--ink);border-radius:22px;padding:14px 18px;box-sizing:border-box;box-shadow:4px 4px 0 var(--ink)}
+.bubble p{margin:0;font-size:.95rem;line-height:1.55}
+.bubble::after{content:"";position:absolute;left:30px;bottom:-12px;width:20px;height:20px;background:#fff;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:rotate(45deg)}
+.dsvg{width:100%;max-width:260px;height:auto;display:block}
+.stats{display:flex;gap:16px;justify-content:center}
+.stat{width:92px;height:92px;border-radius:50%;border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;line-height:1}
+.stat b{font-size:1.8rem}
+.stat small{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.stat.s1{animation:flota 3.2s ease-in-out infinite}
+.stat.s2{animation:flota 3.2s ease-in-out infinite;animation-delay:.8s}
+
+.quiz-q{margin-bottom:16px}
+.quiz-q p{font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:600;margin-bottom:8px}
+.quiz-q label{display:block;padding:9px 14px;border-radius:999px;background:#fff;border:2px solid var(--ink);margin:6px 0;cursor:pointer}
+.quiz-q label:hover{background:var(--cream)}
+.res{font-family:'Fredoka',sans-serif;font-size:1.1rem;margin-top:12px;color:#d6336c}
+.okc{color:#2b8a57!important}
+.malc{color:#d6336c!important}
+
+.bib-list{list-style:none;display:grid;gap:12px}
+.bib-list li{background:var(--cream);border:2px solid var(--ink);border-radius:16px;padding:10px 14px;font-size:.92rem;line-height:1.5;text-indent:-18px;padding-left:32px}
+.bib-group h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;margin:16px 0 8px}
+.bib-note{font-size:.85rem;color:var(--mut);margin-bottom:12px}
+textarea.mis-ref{width:100%;min-height:120px;border-radius:18px;border:3px solid var(--ink);padding:12px;font-size:.92rem;outline:none;background:#fff;color:var(--ink)}
+
+@media(max-width:1000px){
+  #side{transform:translateX(-110%);transition:transform .3s;width:300px}
+  #side.abierto{transform:translateX(0)}
+  #main{margin-left:0;padding:18px 14px}
+  #menu-btn{display:inline-block}
+  .hero{grid-template-columns:1fr}
+  .hero .art{border-left:none;border-top:3px solid var(--ink)}
+  .cover{grid-template-columns:1fr}
+  .cover .dcol{order:-1}
+}
+@keyframes flota{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulso{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.dibs svg .flota{animation:flota 3.2s ease-in-out infinite}
+.dibs svg .pulso{transform-box:fill-box;transform-origin:center;animation:pulso 2.4s ease-in-out infinite}
+.dibs svg{transition:transform .25s}
+.dibs svg:hover{transform:translateY(-3px) rotate(-.4deg)}
+.dibs svg{max-width:260px;margin:0 auto}
+[data-dib]{cursor:pointer}
+.dib-over{position:fixed;inset:0;background:rgba(59,42,74,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.dib-over.on{display:flex}
+.dib-box{background:#fff;border:3px solid var(--ink);border-radius:18px;max-width:560px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:6px 6px 0 var(--ink);position:relative}
+.dib-box h3{margin:0 0 10px;font-size:1.15rem}
+.dib-box p,.dib-box li{font-size:.95rem;line-height:1.55}
+.dib-box ul{padding-left:20px}
+.dib-x{position:absolute;top:10px;right:12px;border:2px solid var(--ink);background:var(--cream);border-radius:10px;padding:2px 10px;cursor:pointer;font-size:1rem}
+.dib-box{background:linear-gradient(165deg,#ffffff 0%,#fdf4ff 55%,#eef7ff 100%);border:3px solid var(--ink);border-radius:26px;box-shadow:8px 8px 0 var(--ink);padding:26px 24px 22px;overflow:hidden}
+.dib-box::before{content:"";position:absolute;inset:9px;border:2px dashed var(--c);border-radius:18px;pointer-events:none;opacity:.9}
+.dib-head{position:relative;z-index:1;display:flex;align-items:center;gap:14px;background:var(--c);border:2.5px solid var(--ink);border-radius:18px;padding:12px 16px;margin-bottom:14px;box-shadow:4px 4px 0 var(--ink)}
+.dib-ico{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:#fff;border:2.5px solid var(--ink);display:grid;place-items:center;font-size:1.9rem;box-shadow:2px 2px 0 var(--ink)}
+.dib-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);opacity:.85}
+.dib-head h3{margin:2px 0 0;font-size:1.2rem;line-height:1.2}
+.dib-body{position:relative;z-index:1;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:14px 16px;background-image:radial-gradient(circle,#f1d6ee 1.2px,transparent 1.4px);background-size:16px 16px}
+.dib-banner{display:block;width:100%;height:auto;border:2.5px solid var(--ink);border-radius:16px;margin-bottom:12px;box-shadow:4px 4px 0 var(--ink)}
+.dib-pie{margin-top:12px;text-align:center;font-size:.8rem;color:var(--mut);letter-spacing:.04em}
+.dib-body{border-left:6px solid var(--c)}
+.dib-body p{margin:0 0 8px}
+.dib-body p:last-child{margin-bottom:0}
+.dib-body .btn{margin-top:10px}
+.dib-deco{position:absolute;z-index:0;font-size:1.3rem;color:var(--ink);pointer-events:none;animation:flota 3.4s ease-in-out infinite}
+.dib-deco.d1{top:14px;left:-4px;color:#ff8fc6}
+.dib-deco.d2{top:58%;right:6px;color:#f5c542;animation-delay:.6s}
+.dib-deco.d3{bottom:12px;left:18px;color:#c79cf5;animation-delay:1.2s}
+.dib-deco.d4{top:12px;right:52px;color:#6cc8a0;animation-delay:1.8s}
+.dib-x{z-index:2;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:#ffc6de;border:2.5px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-weight:700;padding:0;display:grid;place-items:center}
+.dib-x:hover{transform:rotate(90deg);transition:transform .2s}
+.pw{position:relative;background:#ffd9ea radial-gradient(circle,#ffb8d6 1.5px,transparent 2px) 0 0/22px 22px;border:3px solid var(--ink);border-radius:28px;padding:34px 30px;margin-bottom:26px;box-shadow:8px 8px 0 var(--ink)}
+.stk{position:absolute;z-index:2;width:62px;height:62px;border:2.5px solid var(--ink);border-radius:18px;box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;animation:flota 3.4s ease-in-out infinite}
+.stk svg{width:42px;height:42px;overflow:visible}
+.bw{position:relative;z-index:1;background:#fff;border:3px solid var(--ink);border-radius:20px;overflow:hidden;box-shadow:6px 6px 0 var(--ink)}
+.bw-top{display:flex;align-items:center;gap:12px;background:#d7b9f5;border-bottom:3px solid var(--ink);padding:10px 14px}
+.bw-tab{background:#fff;border:2px solid var(--ink);border-radius:12px 12px 0 0;padding:4px 14px;font-weight:700;font-size:.85rem}
+.bw-body{padding:22px 22px 26px;background:linear-gradient(170deg,#ffffff 0%,#fff0f7 100%)}
+.bw-title{font-family:'Fredoka',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);text-align:center;color:#ff7fb7;text-shadow:3px 3px 0 var(--ink);margin:0 0 18px;letter-spacing:.03em}
+.bw-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:22px;align-items:start}
+.bw-frame{border:3px solid var(--ink);border-radius:22px;background:#ecdcff;padding:12px;box-shadow:4px 4px 0 var(--ink)}
+.bw-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;background:#d7b9f5;border-top:3px solid var(--ink);padding:8px 14px;font-size:.8rem;font-weight:700}
+@media (max-width:760px){.bw-grid{grid-template-columns:1fr}.pw{padding:26px 14px}.stk{transform:scale(.7)}}
+</style>
+</head>
+<body>
+
+<aside id="side">
+  <div class="player">
+    <div class="brand">🌸 Portafolio de TIC<small>Santos Alejandra · Primero "C"</small></div>
+    <div class="ctrl">
+      <button id="prev" title="Tema anterior">⏮</button>
+      <button id="marcar" title="Marcar como estudiado">♥</button>
+      <button id="next" title="Tema siguiente">⏭</button>
+    </div>
+    <div class="pbar"><div id="barra"></div></div>
+    <div id="prog-txt"></div>
+  </div>
+  <input class="search" id="buscar" placeholder="🔎 Buscar un tema...">
+  <div class="side-links">
+    <a href="#inicio">🏠 Inicio</a>
+    <a href="#bibliografia">📚 Bibliografía</a>
+  </div>
+  <div id="lista-wrap"><nav id="lista"></nav></div>
+</aside>
+
+<main id="main">
+  <div class="topbar">
+    <button id="menu-btn">☰ Temas</button>
+    <div class="notch">♡ PORTAFOLIO TIC ♡</div>
+  </div>
+  <div id="vista"></div>
+</main>
+
+<script>
+const UNIDADES = [
+  { n: 'Unidad 1', s: 'Fundamentos de la comunicación y redacción', c: '#ffc6de' },
+  { n: 'Unidad 2', s: 'Comunicación no verbal y paralingüística', c: '#d7b9f5' },
+  { n: 'Unidad 3', s: 'Búsqueda de información y bases de datos', c: '#cfe8ff' },
+  { n: 'Unidad 4', s: 'Software e IA para documentos y presentaciones', c: '#d9f5e7' }
+];
+
+/* vid = video real encontrado en las búsquedas (enlace de YouTube) */
+const TEMAS = [
+  { id: 'comunicacion', u: 0, t: 'Comunicación', i: '💬', vid: 'KujFJsEOPTs', vidT: '¿Qué es la comunicación? Proceso y elementos', intro: 'La comunicación es un proceso dinámico e interactivo en el que un emisor transmite un mensaje intencional a un receptor, por medio de un canal y dentro de un contexto, buscando entendimiento mutuo.', c: [['Emisor', 'Quien elabora y origina la intención comunicativa.'], ['Receptor', 'Quien recibe, decodifica e interpreta el mensaje.'], ['Canal y ruido', 'El canal transporta el mensaje; el ruido lo distorsiona.']] },
+  { id: 'expresion', u: 0, t: 'Expresión', i: '🎨', intro: 'La expresión es la manifestación libre de emociones, pensamientos y estados de ánimo. Permite exteriorizar la esencia creativa o afectiva de una persona.', c: [['Corporal', 'Exterioriza emociones con movimientos y posturas.'], ['Artística', 'Se expresa con música, pintura, teatro o escritura.'], ['Verbal', 'Expresa ideas y sentimientos con palabras.']] },
+  { id: 'lenguaje', u: 0, t: 'Lenguaje', i: '🗣️', intro: 'El lenguaje es la capacidad bio-psíquica innata del ser humano para estructurar el pensamiento abstracto y comunicarse con otros.', c: [['Lengua', 'Sistema social y compartido de signos.'], ['Habla', 'Uso individual y concreto que hace cada persona.'], ['Signos', 'Unidades formadas por un significante y un significado.']] },
+  { id: 'funciones', u: 0, t: 'Funciones del lenguaje', i: '⚙️', vid: 'UJxSAq54HkA', vidT: 'Las FUNCIONES del LENGUAJE, explicación con ejemplos (TeoCom)', intro: 'Roman Jakobson describió seis funciones del lenguaje, según el factor del acto comunicativo que se destaque: referencial, emotiva, apelativa, fática, poética y metalingüística.', c: [['Referencial', 'Informa sobre la realidad y datos comprobables.'], ['Emotiva', 'Refleja la subjetividad y afectividad del emisor.'], ['Apelativa', 'Busca persuadir o llamar la atención del receptor.']] },
+  { id: 'verbal', u: 0, t: 'El lenguaje verbal', i: '📖', intro: 'El lenguaje verbal usa directamente la palabra, oral o escrita, bajo códigos gramaticales compartidos.', c: [['Oralidad', 'Comunicación espontánea, apoyada en el contexto.'], ['Escritura', 'Sistema planificado y regido por normas ortográficas.'], ['Texto', 'Conjunto coherente y cohesionado de enunciados.']] },
+  { id: 'noverbal-lenguaje', u: 0, t: 'El lenguaje no verbal', i: '🤝', intro: 'El lenguaje no verbal transmite mensajes con señales corporales, miradas, gestos faciales y distancias entre personas.', c: [['Kinésica', 'Estudia movimientos corporales, gestos y posturas.'], ['Proxémica', 'Estudia el manejo de las distancias interpersonales.'], ['Paralenguaje', 'Elementos de la voz que acompañan al mensaje.']] },
+  { id: 'registros', u: 0, t: 'Roles del lenguaje (registros)', i: '🎭', intro: 'El lenguaje se ajusta según el entorno sociocultural y la jerarquía. Así cambia el registro entre formal e informal.', c: [['Formal', 'Vocabulario técnico y riguroso, en ámbitos académicos.'], ['Informal', 'Léxico espontáneo y coloquial, en círculos de confianza.'], ['Social', 'Adaptación del discurso a cada grupo de la comunidad.']] },
+  { id: 'redaccion', u: 0, t: 'Redacción', i: '✍️', intro: 'La redacción es la capacidad técnica de estructurar ordenadamente un texto escrito, con claridad y cohesión.', c: [['Planificación', 'Reúne datos y diseña el esquema del texto.'], ['Textualización', 'Escribe el borrador aplicando conectores lógicos.'], ['Revisión', 'Corrige estilo, ortografía y coherencia.']] },
+  { id: 'resumen', u: 0, t: 'El resumen', i: '📝', vid: 'vuuagyKU55Y', vidT: 'El resumen (Nueva Escuela Mexicana, SEP)', intro: 'El resumen es una síntesis objetiva y fiel que extrae las ideas fundamentales de un texto fuente, en una extensión más breve.', c: [['Objetividad', 'No incluye juicios personales.'], ['Brevedad', 'Reduce la extensión y conserva el núcleo informativo.'], ['Fidelidad', 'Respeta el pensamiento original del autor.']] },
+  { id: 'sintesis', u: 0, t: 'La síntesis', i: '💡', intro: 'La síntesis recompone el texto con palabras propias, después de una lectura profunda e integración de varias fuentes.', c: [['Análisis', 'Examen detallado de la información consultada.'], ['Integración', 'Une ideas de varios textos en uno solo.'], ['Aporte', 'Incluye tu propio estilo y visión.']] },
+  { id: 'parafrasis', u: 0, t: 'La paráfrasis', i: '🔄', intro: 'La paráfrasis explica un escrito complejo con palabras más sencillas, manteniendo su significado original.', c: [['Cambio', 'Modifica la estructura sintáctica original.'], ['Sinónimos', 'Sustituye términos complejos por equivalentes.'], ['Significado', 'El contenido original se conserva intacto.']] },
+  { id: 'argumento', u: 0, t: 'El argumento', i: '🏛️', intro: 'Un argumento fundamenta o defiende una tesis mediante premisas y una conclusión que se deriva de ellas.', c: [['Tesis', 'Proposición central que se defiende.'], ['Premisas', 'Afirmaciones de respaldo basadas en datos.'], ['Conclusión', 'Se deriva lógicamente de las premisas.']] },
+  { id: 'descripcion', u: 0, t: 'La descripción', i: '🖼️', intro: 'La descripción explica cómo es una persona, un objeto o un lugar, enumerando sus rasgos.', c: [['Objetiva', 'Precisa y técnica, sin emociones.'], ['Subjetiva', 'Cargada de la perspectiva personal del autor.'], ['Tipos', 'Prosopografía, etopeya y topografía.']] },
+  { id: 'ensayo', u: 0, t: 'El ensayo', i: '📄', vid: '3syLMwG8gqg', vidT: 'Nexos y conectores para enlazar ideas (SEP)', intro: 'El ensayo es un texto en prosa que analiza y evalúa un tema con rigor académico y una postura crítica.', c: [['Postura', 'Punto de vista reflexivo y crítico del autor.'], ['Prosa', 'Escritura continua, sin estructura poética.'], ['Reflexión', 'Conclusiones abiertas que invitan al debate.']] },
+  { id: 'estructura-ensayo', u: 0, t: 'Estructura del ensayo', i: '🏗️', intro: 'Un ensayo se organiza en introducción, desarrollo y conclusión, que sostienen el hilo conductor del texto.', c: [['Introducción', 'Planteamiento del tema y exposición de la tesis.'], ['Desarrollo', 'Cuerpo argumentativo con evidencias.'], ['Conclusión', 'Síntesis de hallazgos y de argumentos.']] },
+  { id: 'caracteristicas-ensayo', u: 0, t: 'Características del ensayo', i: '✨', intro: 'El ensayo se distingue de otros textos académicos por su brevedad, su subjetividad y su cuidado estilístico.', c: [['Brevedad', 'Trata un tema delimitado de forma concisa.'], ['Subjetividad', 'Expone puntos de vista respaldados.'], ['Estilo', 'Cuidado en la selección del lenguaje.']] },
+
+  { id: 'noverbal', u: 1, t: 'Comunicación no verbal', i: '👀', intro: 'La comunicación no verbal transmite mensajes mediante comportamientos corporales, sin usar palabras.', c: [['Mirada', 'Regula turnos y muestra interés.'], ['Postura', 'Proyecta seguridad o apertura.'], ['Gestos', 'Ilustran, enfatizan o sustituyen palabras.']] },
+  { id: 'contacto', u: 1, t: 'El contacto visual', i: '👁️', intro: 'El contacto visual muestra interés y sinceridad, y ayuda a regular los turnos de la conversación.', c: [['Función', 'Regula la conversación.'], ['Sinceridad', 'Transmite transparencia con la mirada.'], ['Conexión', 'Genera empatía con el interlocutor.']] },
+  { id: 'posturas', u: 1, t: 'Posturas y movimientos', i: '🧍', intro: 'La disposición física del cuerpo proyecta seguridad, apertura o firmeza ante el auditorio.', c: [['Seguridad', 'Transmite confianza y dominio.'], ['Apertura', 'Postura receptiva y accesible.'], ['Movimiento', 'Desplazamientos controlados durante una exposición.']] },
+  { id: 'gestos', u: 1, t: 'Los gestos', i: '👋', intro: 'Los gestos de manos y brazos sirven para ilustrar, enfatizar o sustituir palabras durante la comunicación.', c: [['Emblemas', 'Se traducen directamente a palabras.'], ['Ilustradores', 'Acompañan el ritmo del discurso.'], ['Énfasis', 'Refuerzan un concepto clave.']] },
+  { id: 'facial', u: 1, t: 'La expresión facial', i: '😊', vid: 'UGBiCCaybR8', vidT: 'Cerebro empático. El poder de los gestos (CETI)', intro: 'Los movimientos del rostro comunican emociones básicas y universales, como la alegría, la tristeza o la sorpresa.', c: [['Alegría', 'Elevación de las comisuras labiales.'], ['Tristeza', 'Descenso de las comisuras y cejas arqueadas.'], ['Sorpresa', 'Apertura ocular ante lo inesperado.']] },
+  { id: 'factual', u: 1, t: 'Comunicación factual / no factual', i: '📢', intro: 'Un mensaje factual se apoya en datos verificables; uno no factual se basa en ficción, mitos o subjetividad.', c: [['Factual', 'Basado en datos reales y comprobables.'], ['No factual', 'Basado en ficción, mitos o subjetividad.'], ['Opinión', 'Juicio personal sin verificación estricta.']] },
+  { id: 'paralinguistica', u: 1, t: 'Paralingüística', i: '🎙️', intro: 'La paralingüística estudia los elementos vocales que acompañan al mensaje, como el tono, el ritmo y el volumen.', c: [['Tono', 'Altura de la voz, aguda o grave.'], ['Volumen', 'Intensidad o fuerza sonora.'], ['Ritmo', 'Cadencia y velocidad de las palabras.']] },
+  { id: 'funciones-voz', u: 1, t: 'Funciones de la voz', i: '🔊', intro: 'La voz transmite información, persuade y refleja la identidad personal de quien habla.', c: [['Claridad', 'Nitidez en la transmisión del mensaje.'], ['Persuasión', 'Capacidad de influir en el oyente.'], ['Identidad', 'Sello sonoro único de cada hablante.']] },
+  { id: 'caracteristicas-voz', u: 1, t: 'Características de la voz', i: '🎵', intro: 'El timbre, la intensidad y la resonancia determinan la calidad de la voz durante una locución.', c: [['Timbre', 'Matiz sonoro característico de cada persona.'], ['Intensidad', 'Amplitud de la energía sonora.'], ['Resonancia', 'Amplificación en las cavidades del cuerpo.']] },
+  { id: 'articulacion', u: 1, t: 'Articulación de la voz', i: '🗣️', intro: 'La articulación es la pronunciación clara y definida de los sonidos mediante los órganos fonoarticulatorios.', c: [['Dicción', 'Corrección al pronunciar las palabras.'], ['Vocalización', 'Apertura y moldeo claro de las vocales.'], ['Órganos', 'Labios, lengua y paladar activos.']] },
+
+  { id: 'nivel', u: 2, t: 'Establecer el nivel de búsqueda', i: '🎯', vid: 'NcYcVJCMTfo', vidT: 'Los 4 pasos de la búsqueda de información (CONRICyT)', intro: 'Antes de buscar se define la profundidad de la búsqueda: qué tan general o especializada debe ser la información que se necesita.', c: [['Nivel', 'Define si la información será general o especializada.'], ['Filtro', 'Acota resultados por tipo de documento, año o idioma.'], ['Propósito', 'Relaciona la búsqueda con la necesidad concreta de información.']] },
+  { id: 'cobertura', u: 2, t: 'Cobertura de la búsqueda', i: '🗺️', intro: 'La cobertura indica el alcance de la búsqueda: qué periodo, qué regiones y qué idiomas se incluyen en los resultados.', c: [['Periodo', 'Años que abarca la búsqueda.'], ['Geografía', 'Países o regiones de las fuentes consultadas.'], ['Idioma', 'Lenguas de los documentos que se buscan.']] },
+  { id: 'fuentes', u: 2, t: 'Seleccionar fuentes de información', i: '📚', vid: '5cIzTQvqk2M', vidT: 'Elementos en común de las bases de datos (CONRICyT)', intro: 'Las fuentes se clasifican según su especialización y fiabilidad: primarias, secundarias y terciarias.', c: [['Primarias', 'Información directa e inédita, como artículos o tesis.'], ['Secundarias', 'Compilaciones, índices y bases bibliográficas.'], ['Terciarias', 'Guías y catálogos que orientan la búsqueda.']] },
+  { id: 'estrategia', u: 2, t: 'Estrategia de búsqueda', i: '🔍', intro: 'La estrategia combina términos clave con operadores booleanos para mejorar la precisión de la búsqueda en bases de datos.', c: [['AND', 'Intersección: aparecen ambos términos.'], ['OR', 'Unión: ideal para sinónimos.'], ['Comillas', 'Buscan una frase exacta.']] },
+  { id: 'operadores', u: 2, t: 'Operadores booleanos', i: '🔗', intro: 'Los operadores booleanos AND, OR y NOT conectan palabras clave para ampliar, reducir o excluir resultados en bases de datos y buscadores.', c: [['AND (Y)', 'Cada resultado contiene todos los términos. Sirve para restringir la búsqueda.'], ['OR (O)', 'Cada resultado contiene al menos uno de los términos. Sirve para ampliar la búsqueda.'], ['NOT (NO)', 'Excluye un término: el resultado tiene el primero, pero no el segundo.']] },
+  { id: 'academico', u: 2, t: 'Google Académico', i: '🌐', vid: 'H6ozbJv9C8g', vidT: 'Google Académico. Tutorial de uso (2022)', intro: 'Google Académico es un buscador especializado y de acceso libre para literatura científica, tesis y libros.', c: [['Citas', 'Muestra quién cita cada publicación.'], ['Índice h', 'Métrica de impacto del autor.'], ['Acceso', 'Gratuito para buscar literatura.']] },
+  { id: 'latindex', u: 2, t: 'Latindex', i: '📊', intro: 'Latindex es un sistema regional de información sobre revistas científicas de América Latina, el Caribe, España y Portugal.', c: [['Catálogo', 'Revistas que cumplen criterios de calidad editorial.'], ['Directorio', 'Registro de publicaciones seriadas.'], ['Regional', 'Enfoque en Iberoamérica y el Caribe.']] },
+  { id: 'scielo', u: 2, t: 'SciELO', i: '🔬', intro: 'SciELO es una biblioteca electrónica cooperativa de revistas científicas de acceso abierto y texto completo.', c: [['Acceso abierto', 'Textos completos sin restricciones.'], ['Red', 'Colecciones de varios países conectadas.'], ['Revistas', 'Publicaciones periódicas indexadas.']] },
+  { id: 'scopus', u: 2, t: 'Scopus', i: '📈', vid: '0_PQDqXvfa8', vidT: 'Tutorial de Scopus (Elsevier)', intro: 'Scopus es una base bibliográfica de resúmenes y citas de literatura revisada, con métricas internacionales.', c: [['Resúmenes', 'Síntesis de las publicaciones indexadas.'], ['Métricas', 'Indicadores como SJR y CiteScore.'], ['Acceso', 'Base de suscripción, usada por universidades.']] },
+
+  { id: 'procesadores', u: 3, t: 'Generalidades de los procesadores de texto', i: '📝', vid: 'gLVqe-YlJqw', vidT: 'Configuración de tablas en APA-7 en Word (Saber Programas)', intro: 'Los procesadores de texto permiten crear documentos profesionales con formato, tablas y estilos.', c: [['Word', 'Procesador ofimático muy utilizado.'], ['Formato', 'Tipografía, tablas y estilos.'], ['Normas APA', 'Estructura académica estandarizada.']] },
+  { id: 'aplicaciones-procesadores', u: 3, t: 'Aplicaciones de los procesadores de texto', i: '📋', vid: 'SbTavKPgM5w', vidT: 'Niveles de títulos y subtítulos en APA-7 (Saber Programas)', intro: 'En el ámbito profesional se usan para informes, tesis y maquetación, automatizando índices y referencias.', c: [['Índices', 'Automatizan tabla de contenido y referencias.'], ['Tablas', 'Organizan datos estructurados.'], ['Plantillas', 'Agilizan documentos repetitivos.']] },
+  { id: 'atajos-word', u: 3, t: 'Atajos de teclado en Word', i: '⌨️', intro: 'Los atajos de teclado ejecutan comandos de Word sin usar el ratón, lo que ahorra tiempo al redactar y dar formato a un documento.', c: [['Archivos', 'Ctrl+N crea un documento nuevo, Ctrl+O lo abre y Ctrl+S lo guarda.'], ['Navegación', 'Ctrl+Inicio lleva al inicio del documento y Ctrl+Fin al final.'], ['Formato', 'Ctrl+Mayús+V pega solo el formato copiado y Ctrl+K inserta un enlace.']] },
+  { id: 'atajos-excel', u: 3, t: 'Atajos de teclado en Excel', i: '📊', intro: 'Los atajos de Excel permiten moverse entre celdas y hojas, seleccionar datos y trabajar con libros sin depender del ratón.', c: [['Libros y hojas', 'Ctrl+W cierra el libro y Ctrl+AvPág pasa a la hoja siguiente.'], ['Selección', 'Ctrl+Espacio selecciona la columna completa y Mayús+Espacio la fila completa.'], ['Celdas', 'Alt+Intro inserta un salto de línea dentro de la celda y Ctrl+Mayús+Fin extiende la selección hasta la última celda usada.']] },
+  { id: 'presentaciones', u: 3, t: 'Usos de las presentaciones', i: '🖥️', intro: 'Las presentaciones son recursos visuales que sintetizan conceptos y apoyan una exposición oral.', c: [['Síntesis', 'Reduce las ideas a esquemas claros.'], ['Apoyo', 'Facilita la comprensión y la retención.'], ['Impacto', 'Genera un efecto persuasivo en el público.']] },
+  { id: 'powerpoint', u: 3, t: 'PowerPoint', i: '📽️', intro: 'PowerPoint es el software clásico de Microsoft para crear diapositivas con títulos, texto, imágenes y animaciones.', c: [['Diapositivas', 'Cada diapositiva organiza un concepto con títulos, texto e imágenes.'], ['Plantillas', 'Diseños predefinidos que dan un formato uniforme a toda la presentación.'], ['Animaciones', 'Efectos que muestran los elementos de la diapositiva en el orden elegido.']] },
+  { id: 'prezi', u: 3, t: 'Prezi', i: '🔭', intro: 'Prezi es una herramienta de presentación que usa un lienzo único con navegación tipo zoom entre las ideas.', c: [['Lienzo', 'Todo el contenido está en una sola superficie, sin diapositivas tradicionales.'], ['Zoom', 'La navegación acerca y aleja la vista para mostrar relaciones entre ideas.'], ['Ruta', 'Un recorrido guiado marca el orden de la exposición.']] },
+  { id: 'canva', u: 3, t: 'Canva', i: '🎨', intro: 'Canva es una plataforma de diseño en la nube con plantillas para presentaciones, carteles y piezas gráficas.', c: [['Plantillas', 'Diseños listos para editar en presentaciones y piezas gráficas.'], ['Elementos', 'Biblioteca de imágenes, íconos y formas para personalizar.'], ['Colaboración', 'Permite compartir y editar el diseño con otras personas.']] },
+  { id: 'colaborativo', u: 3, t: 'Presentaciones colaborativas', i: '👥', intro: 'Las herramientas en la nube permiten editar en tiempo real y conservar el historial de versiones entre varias personas.', c: [['Tiempo real', 'Varias personas editan el mismo archivo a la vez.'], ['Versiones', 'Historial de cambios guardados.'], ['Nube', 'Guardado automático en línea.']] },
+  { id: 'copilot', u: 3, t: 'Copilot', i: '🧑‍✈️', intro: 'Copilot es el asistente de IA de Microsoft, integrado en Word, PowerPoint y Excel, que ayuda a redactar y resumir contenidos.', c: [['Redacción', 'Genera borradores y propone mejoras de texto dentro de Word.'], ['Diapositivas', 'Crea o resume contenido para presentaciones en PowerPoint.'], ['Revisión', 'Ayuda a revisar un texto, pero el resultado debe verificarse.']] },
+  { id: 'gemini', u: 3, t: 'Gemini', i: '✨', vid: 'MtR1GQVeBEI', vidT: 'Videotutorial de Gemini (UPM)', intro: 'Gemini es el modelo de IA de Google, usado para conversar, resumir y apoyar la investigación y la escritura.', c: [['Consulta', 'Responde preguntas y explica temas en lenguaje natural.'], ['Documentos', 'Resume y redacta a partir de los textos que se le indican.'], ['Integración', 'Funciona dentro del ecosistema de Google Workspace.']] },
+  { id: 'ia-responsable', u: 3, t: 'Uso responsable de la IA', i: '⚖️', intro: 'El uso responsable de la IA exige verificar la información, citar las fuentes y declarar cuándo se usó la herramienta.', c: [['Verificar', 'Contrastar cada dato con fuentes confiables antes de usarlo.'], ['Citar', 'Dar crédito a las fuentes y declarar el uso de la IA según la norma.'], ['Ética', 'Evitar el plagio y no presentar como propio un texto generado sin revisión.']] },
+];
+
+/* Fuentes web encontradas en las búsquedas */
+const FUENTES = {
+  'powerpoint': [['Las mejores alternativas a PowerPoint (Digital Trends)', 'https://es.digitaltrends.com/guias/alternativas-a-powerpoint/']],
+  'prezi': [['Prezi o Canva (Prezi)', 'https://prezi.com/es/lp/canva-alternative/']],
+  'copilot': [['Conozcan a su asistente de IA para el sector educativo: Microsoft Copilot', 'https://news.microsoft.com/source/latam/noticias-de-microsoft/conozcan-a-su-asistente-de-ia-para-el-sector-educativo-microsoft-copilot/'], ['Copilot se pone al día con Gemini y ChatGPT y con los estudiantes (Digital Trends)', 'https://es.digitaltrends.com/computadoras/copilot-se-pone-al-dia-con-gemini-y-chatgpt-y-con-los-estudiantes/']],
+  'operadores': [['Anexo 1: operadores booleanos (UAM)', 'https://www.uam.es/uam/media/doc/1607003556322/anexo-1-operadores-booleanos.pdf'], ['Estrategias de búsqueda (UCM)', 'https://biblioteca.ucm.es/data/cont/media/www/pag-102712/ESTRATEGIAS%20DE%20BÚSQUEDA.pdf'], ['Operadores booleanos (Lifeder)', 'https://www.lifeder.com/operadores-booleanos/']],
+  'atajos-word': [['Métodos abreviados de teclado en Word (Microsoft)', 'https://support.microsoft.com/es-es/Accessibility/word/keyboard-shortcuts-in-word'], ['Atajos de teclado de Word (Futura Sciences)', 'https://www.futura-sciences.com/es/?p=22737']],
+  'atajos-excel': [['Métodos abreviados de teclado de Excel (Microsoft)', 'https://support.microsoft.com/es-es/Accessibility/excel/keyboard-shortcuts-in-excel'], ['160 atajos de teclado para Excel (Genbeta)', 'https://www.genbeta.com/a-fondo/160-atajos-teclado-para-excel-windows-para-agilizar-tu-trabajo-hojas-calculo']],
+  comunicacion: [['Activa tu circuito de comunicación (Colombia Aprende)', 'https://colombiaaprende.edu.co/recurso-coleccion/activa-tu-circuito-de-comunicacion'], ['Clase digital: el proceso de comunicación (UGTO)', 'https://blogs.ugto.mx/bachilleratovirtual/clase-digital-2-el-proceso-de-comunicacion/']],
+  funciones: [['Funciones del lenguaje (Aula virtual CAIB)', 'https://aulavirtual.caib.es/c07008351/mod/resource/view.php?id=47392'], ['Clase digital 3: funciones de Jakobson aplicadas a imágenes (UGTO)', 'https://blogs.ugto.mx/rea/clase-digital-3-funciones-del-lenguaje-propuestas-por-roman-jakobson-aplicadas-para-el-analisis-de-imagenes/']],
+  'noverbal-lenguaje': [['Habilidades de comunicación no verbal (Positive Psychology)', 'https://positivepsychology.com/es/comunicacion-no-verbal/'], ['Sistemas de la comunicación no verbal y proxémica (PUCE)', 'https://eva.puce.edu.ec/EV-2025/pluginfile.php/53259/mod_label/intro/C19RP.pdf']],
+  noverbal: [['Habilidades de comunicación no verbal (Positive Psychology)', 'https://positivepsychology.com/es/comunicacion-no-verbal/']],
+  gestos: [['Habilidades de comunicación no verbal (Positive Psychology)', 'https://positivepsychology.com/es/comunicacion-no-verbal/']],
+  facial: [['Las 16 expresiones faciales más comunes (Digital Trends)', 'https://es.digitaltrends.com/noticias/las-16-expresiones-faciales-mas-comunes-en-las-personas/'], ['Clase de expresión facial de las emociones (CETI)', 'https://tonala.ceti.mx/modulos/default/public/files/info/construyet/lecciones/estudiantes/Autoconocimiento_9.3_E.pdf']],
+  paralinguistica: [['La competencia comunicativa desde el componente paralingüístico (ReHuso, 2016)', 'https://www.redalyc.org/pdf/6731/673171012005.pdf'], ['Elementos paraverbales asociados a emociones (SciELO México)', 'https://www.scielo.org.mx/pdf/facmed/v62n6/2448-4865-facmed-62-06-56.pdf']],
+  'funciones-voz': [['Tres niveles de comunicación: verbal, no verbal y paraverbal (Platzi)', 'https://platzi.com/cursos/comunicacion-asertiva/tres-niveles-de-comunicacion-verbal-no-v/']],
+  'caracteristicas-voz': [['Los sonidos de la emoción (presentación de voz)', 'https://posipedia.com.co/wp-content/uploads/2025/09/25.-PRESENTACION-SESION-7-LOS-SONIDOS-DE-LA-EMPATIA.pdf']],
+  ensayo: [['Cómo escribir un ensayo ensayando (SEP)', 'https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/como-escribir-un-ensayo-ensayando/'], ['Ensayo: introducción, desarrollo y conclusión (Argentina.gob.ar)', 'https://www.argentina.gob.ar/node/374060']],
+  'estructura-ensayo': [['Ensayo: introducción, desarrollo y conclusión (Argentina.gob.ar)', 'https://www.argentina.gob.ar/node/374060'], ['Ensayo (UANL, guía CHIP)', 'https://www.uanl.mx/utilerias/chip/descarga/ensayo.pdf']],
+  'caracteristicas-ensayo': [['Ensayo (UANL, guía CHIP)', 'https://www.uanl.mx/utilerias/chip/descarga/ensayo.pdf']],
+  resumen: [['Y tú, ¿sabes cómo elaborar un resumen? (SEP)', 'https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/y-tu-sabes-como-elaborar-un-resumen/']],
+  sintesis: [['Y tú, ¿sabes cómo elaborar un resumen? (SEP)', 'https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/y-tu-sabes-como-elaborar-un-resumen/']],
+  parafrasis: [['Entre citas y paráfrasis (SEP)', 'https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/entre-citas-y-parafrasis/'], ['Parafrasear vs. resumir (TextCortex)', 'https://textcortex.com/es/post/parafrasear-vs-resumir']],
+  argumento: [['Validando mis argumentos (SEP)', 'https://nuevaescuelamexicana.sep.gob.mx/contenido/coleccion/validando-mis-argumentos/'], ['Principios de la argumentación (Universidad Externado)', 'https://www.uexternado.edu.co/wp-content/uploads/2023/08/PRINCIPIOS-DE-LA-ARGUMENTACION.pdf']],
+  descripcion: [['Prosopografía: significado y ejemplos (QuillBot)', 'https://quillbot.com/es/blog/figuras-literarias/prosopografia/'], ['Etopeya: significado y ejemplos (QuillBot)', 'https://quillbot.com/es/blog/figuras-literarias/etopeya/']],
+  fuentes: [['Introducción a la búsqueda de información en internet (MINEDU Perú)', 'https://www.minedu.gob.pe/conectados/pdf/introduccion-busqueda-informacion-internet.pdf']],
+  nivel: [['Los principios básicos de recuperación de información (CATEDU)', 'https://prelibros.catedu.es/books/estrategias-de-busqueda-en-internet/chapter/3-los-principios-basicos-de-recuperacion-de-informacion/export/pdf']],
+  estrategia: [['Anexo: operadores booleanos (UAM)', 'https://www.uam.es/uam/media/doc/1607003556322/anexo-1-operadores-booleanos.pdf'], ['Estrategias de búsqueda de información (UNITEC)', 'https://crai.unitec.edu/wp-content/uploads/2025/08/estrategias_de_busqueda_de_informacion_.pdf']],
+  academico: [['Todo sobre Google Académico (Digital Trends)', 'https://es.digitaltrends.com/guias/todo-sobre-google-academico/'], ['Google Académico: qué es y cómo funciona (Xataka)', 'https://www.xataka.com/basics/google-academico-que-como-funciona']],
+  latindex: [['Recursos de visibilidad e indización de revistas (Latindex-UNAM)', 'https://latindex.unam.mx/lat/documentos/Recursos_visibilidad_indizacion_revistas.pdf'], ['Latindex: revistas científicas iberoamericanas y cooperación regional (Alonso-Gamboa, 2015)', 'https://revista.ibict.br/ciinf/article/download/1772/2366/3577']],
+  scielo: [['SciELO: red de revistas en acceso abierto', 'https://www.scielo.org/']],
+  scopus: [['Tutorial de Scopus (Universidad Autónoma de Occidente)', 'https://uao.libguides.com/Scopus'], ['Bases de datos de referencia: Scopus (MINEDU Perú)', 'https://www.minedu.gob.pe/conectados/pdf/cursos/webinars/2022/29-de-noviembre-2022-busqueda-y-gestion-de-la-informacion-academica-parte-2.pdf']],
+  procesadores: [['Normas APA: formato de presentación de trabajos (UPV/EHU)', 'https://www.ehu.eus/documents/d/biblioteka/estilo-apa-anexo-2-formato-de-presentacion-de-trabajos_']],
+  'aplicaciones-procesadores': [['Normas APA 2023 (Universidad de Valladolid)', 'https://biblioteca.uva.es/files/2023/10/Normas-APA_2023.pdf']],
+  presentaciones: [['Presentaciones de Canva', 'https://www.canva.com/es_es/presentaciones/']],
+  colaborativo: [['Presentaciones de Canva para equipos', 'https://www.canva.com/es_us/crear/presentaciones/']],
+};
+
+/* Bibliografía al final: entradas con autor y año cuando la búsqueda los confirmó */
+const BIB_FORMAL = [
+  'Alonso-Gamboa, J. O. (2015). Latindex: revistas científicas iberoamericanas y cooperación regional. Ci.Inf., 44(2), 187–198. https://revista.ibict.br/ciinf/article/download/1772/2366/3577',
+  'American Psychological Association. (2020). Publication manual of the American Psychological Association (7.ª ed.). APA.',
+  'Chávez, M. A., Durán Muñoz, E., & Arguello Mendoza, M. G. T. (2024). OLIVA-2: las revistas iberoamericanas indexadas en Biblat y Latindex: fuentes fundamentales para conocer la producción científica global. e-Ciencias de la Información, 14(1), 1–24. https://www.redalyc.org/journal/4768/476877313001/476877313001.pdf',
+  'Darwin, C. (2009). La expresión de las emociones. Laetoli. (Obra original publicada en 1872).',
+  'Davis, F. (1976). La comunicación no verbal. Alianza Editorial. (Edición original de 1971).',
+  'Ekman, P. (2003). El rostro de las emociones: qué nos revelan las expresiones faciales. [Verificar editorial en tu biblioteca].',
+  'Intriago Macías, C., & López González, S. (2016). La competencia comunicativa desde el componente paralingüístico en la comunicación audiovisual periodística. ReHuso, 1(2), 87–102. https://www.redalyc.org/pdf/6731/673171012005.pdf',
+  'Jakobson, R. (1960). Closing statement: Linguistics and poetics. En T. A. Sebeok (Ed.), Style in language (pp. 350–377). MIT Press.'
+];
+
+/* Videos usados en la página */
+const VIDEOS_BIB = TEMAS.filter(t => t.vid).map(t => `${t.vidT}. (s. f.). YouTube. https://www.youtube.com/watch?v=${t.vid}`);
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+function get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+function set(k, v) { try { localStorage.setItem(k, v); } catch (e) { alert('No hay espacio en el navegador. Revisa el espacio disponible del navegador.'); } }
+function filtroActual() { return $('#buscar').value.trim().toLowerCase(); }
+function ytId(v) { const m = (v || '').match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : ''; }
+function estudiado(id) { return !!get('visto-' + id, ''); }
+
+function progreso() {
+  const n = TEMAS.filter(t => estudiado(t.id)).length;
+  $('#barra').style.width = (n / TEMAS.length * 100) + '%';
+  $('#prog-txt').textContent = '♥ ' + n + ' / ' + TEMAS.length + ' estudiados';
+}
+
+/* ---------- dibujos kawaii propios (SVG) ---------- */
+function nube(x, y, s) {
+  const c = [[0,0,18],[22,-10,24],[48,0,18],[30,10,16]].map(p => [x + p[0]*s, y + p[1]*s, p[2]*s]);
+  const borde = c.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]+3}" fill="#3b2a4a"/>`).join('');
+  const relleno = c.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="#ffffff"/>`).join('');
+  return borde + relleno;
+}
+function corazon(x, y, s, col) {
+  return `<path transform="translate(${x},${y}) scale(${s})" d="M0,6 C-14,-6 -22,-2 -12,-12 C-6,-18 0,-14 0,-8 C0,-14 6,-18 12,-12 C22,-2 14,-6 0,6Z" fill="${col}" stroke="#3b2a4a" stroke-width="2.5"/>`;
+}
+function destello(x, y, s) {
+  return `<path transform="translate(${x},${y}) scale(${s})" d="M0,-12 Q2,-2 12,0 Q2,2 0,12 Q-2,2 -12,0 Q-2,-2 0,-12Z" fill="#ffffff" stroke="#3b2a4a" stroke-width="2"/>`;
+}
+function dibujo(t, color) {
+  let s = 0; for (const ch of t.id) s += ch.charCodeAt(0);
+  const r = k => ((s * (k + 7) * 9301 + 49297) % 233280) / 233280;
+  const deco = [
+    nube(38 + r(1)*30, 52 + r(2)*14, 0.6),
+    nube(262 + r(3)*30, 196 + r(4)*12, 0.7),
+    corazon(40 + r(5)*20, 170, 1.5, '#ffc6de'),
+    corazon(330 + r(6)*16, 70, 1.2, '#d7b9f5'),
+    destello(335, 186, 1.1), destello(58, 100, 0.9), destello(196, 26, 0.9)
+  ].join('');
+  return `<svg viewBox="0 0 400 280" role="img" aria-label="Dibujo del tema ${t.t}">
+    <rect width="400" height="280" rx="18" fill="${color}"/>
+    <rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="#3b2a4a" stroke-width="3" stroke-dasharray="2 8"/>
+    ${deco}
+    <rect x="110" y="48" width="180" height="150" rx="16" fill="#ffffff" stroke="#3b2a4a" stroke-width="4"/>
+    <rect x="110" y="48" width="180" height="22" rx="10" fill="#d7b9f5" stroke="#3b2a4a" stroke-width="4"/>
+    <circle cx="124" cy="59" r="4" fill="#fff" stroke="#3b2a4a" stroke-width="2"/>
+    <circle cx="138" cy="59" r="4" fill="#fff" stroke="#3b2a4a" stroke-width="2"/>
+    <text x="200" y="134" font-size="62" text-anchor="middle">${t.i}</text>
+    <rect x="130" y="176" width="140" height="6" rx="3" fill="#3b2a4a" opacity=".25"/>
+    <rect x="60" y="222" width="280" height="30" rx="15" fill="#ffffff" stroke="#3b2a4a" stroke-width="3"/>
+    <text x="200" y="242" font-size="14" font-family="Fredoka, sans-serif" text-anchor="middle" fill="#3b2a4a">${t.t}</text>
+  </svg>`;
+}
+
+/* ---------- dibujos por tema (SVG, relacionados con cada tema) ---------- */
+const INK = '#3b2a4a';
+const PAL = ['#ffc6de', '#d7b9f5', '#cfe8ff', '#d9f5e7', '#fff3b8', '#ffd9b8'];
+function esc2(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+function tx(x, y, label, fs, maxc) {
+  const lines = []; let cur = '';
+  String(label).split(' ').forEach(w => {
+    if ((cur + ' ' + w).trim().length > maxc && cur) { lines.push(cur); cur = w; }
+    else cur = (cur + ' ' + w).trim();
+  });
+  lines.push(cur);
+  const lh = fs * 1.15, y0 = y - (lines.length - 1) * lh / 2 + fs * 0.35;
+  return `<text font-size="${fs}" text-anchor="middle" font-family="Fredoka, sans-serif" fill="${INK}">${lines.map((l, i) => `<tspan x="${x}" y="${(y0 + i * lh).toFixed(1)}">${esc2(l)}</tspan>`).join('')}</text>`;
+}
+function pill(x, y, w, h, txt, fill, fs) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" fill="${fill || '#ffffff'}" stroke="${INK}" stroke-width="2.5"/>` + tx(x + w / 2, y + h / 2, txt, fs || 12, 18);
+}
+function frame(color, inner) {
+  return `<svg viewBox="0 0 400 280" style="width:100%;height:auto" role="img"><rect width="400" height="280" rx="18" fill="${color}"/><rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="2 8"/>${destello(30, 262, 0.8)}${destello(372, 22, 0.8)}${inner}</svg>`;
+}
+const R = {
+  flow(items) {
+    const n = items.length, gap = 24, m = 18, w = (400 - 2 * m - (n - 1) * gap) / n, h = 76, y = 112;
+    return items.map((it, i) => {
+      const x = m + i * (w + gap);
+      let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + tx(x + w / 2, y + h / 2, it, n > 3 ? 12 : 14, n > 3 ? 10 : 13);
+      if (i < n - 1) {
+        const ax = x + w + 4, bx = x + w + gap - 4, ay = y + h / 2;
+        s += `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${ay}" stroke="${INK}" stroke-width="3"/><path d="M${bx},${ay - 7} L${bx + 8},${ay} L${bx},${ay + 7}Z" fill="${INK}"/>`;
+      }
+      return s;
+    }).join('');
+  },
+  hub(c, items) {
+    const n = items.length, cx = 200, cy = 140;
+    const pos = items.map((_, i) => { const a = (-90 + i * 360 / n) * Math.PI / 180; return [cx + 128 * Math.cos(a), cy + 92 * Math.sin(a)]; });
+    const lines = pos.map(p => `<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="${INK}" stroke-width="3" stroke-dasharray="6 6"/>`).join('');
+    const pills = items.map((it, i) => pill(pos[i][0] - 62, pos[i][1] - 17, 124, 34, it, PAL[(i + 1) % PAL.length], 12)).join('');
+    return lines + `<circle cx="${cx}" cy="${cy}" r="56" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + tx(cx, cy, c, 15, 10) + pills;
+  },
+  layers(items) {
+    const n = items.length, h = (200 - (n - 1) * 10) / n;
+    return items.map((it, i) => { const y = 45 + i * (h + 10); return `<rect x="70" y="${y}" width="260" height="${h}" rx="16" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + tx(200, y + h / 2, it, 15, 22); }).join('');
+  },
+  steps(items) {
+    const n = items.length, w = (360 - (n - 1) * 10) / n, base = 250;
+    return items.map((it, i) => {
+      const hh = n === 3 ? 60 + i * 55 : 50 + i * 45, x = 20 + i * (w + 10), y = base - hh;
+      return `<rect x="${x}" y="${y}" width="${w}" height="${hh}" rx="12" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + tx(x + w / 2, y + 24, it, 13, 11);
+    }).join('');
+  },
+  compare(a, b) {
+    const card = (x, arr, col) => { const [t, ...ls] = arr;
+      return `<rect x="${x}" y="40" width="170" height="200" rx="18" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + pill(x + 12, 50, 146, 30, t, col, 13) + ls.map((l, i) => tx(x + 85, 116 + i * 34, l, 13, 16)).join(''); };
+    return card(24, a, PAL[0]) + card(206, b, PAL[2]);
+  },
+  callouts(items) {
+    const n = items.length;
+    const fig = `<circle cx="100" cy="105" r="36" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/><circle cx="88" cy="100" r="3.5" fill="${INK}"/><circle cx="112" cy="100" r="3.5" fill="${INK}"/><circle cx="80" cy="116" r="5" fill="#ffc6de"/><circle cx="120" cy="116" r="5" fill="#ffc6de"/><path d="M90,116 Q100,126 110,116" fill="none" stroke="${INK}" stroke-width="2.5"/><rect x="70" y="146" width="60" height="84" rx="24" fill="#d7b9f5" stroke="${INK}" stroke-width="3"/>`;
+    const ys = items.map((_, i) => 36 + i * (n > 1 ? 174 / (n - 1) : 0));
+    const lines = ys.map(y => `<line x1="138" y1="150" x2="252" y2="${y + 17}" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 5"/>`).join('');
+    return fig + lines + items.map((it, i) => pill(252, ys[i], 132, 34, it, PAL[i % PAL.length], 12)).join('');
+  },
+  faces(items) {
+    return items.map((it, i) => {
+      const cx = 72 + (i % 3) * 128, cy = 88 + Math.floor(i / 3) * 100;
+      let mouth;
+      if (i === 0) mouth = `<path d="M${cx - 13},${cy + 8} Q${cx},${cy + 22} ${cx + 13},${cy + 8}" fill="none" stroke="${INK}" stroke-width="2.5"/>`;
+      else if (i === 1) mouth = `<path d="M${cx - 13},${cy + 16} Q${cx},${cy + 2} ${cx + 13},${cy + 16}" fill="none" stroke="${INK}" stroke-width="2.5"/>`;
+      else if (i === 2) mouth = `<circle cx="${cx}" cy="${cy + 14}" r="5" fill="${INK}"/>`;
+      else if (i === 3) mouth = `<path d="M${cx - 17},${cy - 14} L${cx - 6},${cy - 10} M${cx + 17},${cy - 14} L${cx + 6},${cy - 10} M${cx - 10},${cy + 14} L${cx + 10},${cy + 14}" stroke="${INK}" stroke-width="2.5" fill="none"/>`;
+      else if (i === 4) mouth = `<ellipse cx="${cx}" cy="${cy + 14}" rx="4" ry="6" fill="${INK}"/>`;
+      else mouth = `<path d="M${cx - 12},${cy + 12} Q${cx - 6},${cy + 6} ${cx},${cy + 12} T${cx + 12},${cy + 12}" fill="none" stroke="${INK}" stroke-width="2.5"/>`;
+      return `<circle cx="${cx}" cy="${cy}" r="32" fill="#ffffff" stroke="${INK}" stroke-width="3"/><circle cx="${cx - 11}" cy="${cy - 7}" r="3" fill="${INK}"/><circle cx="${cx + 11}" cy="${cy - 7}" r="3" fill="${INK}"/>` + mouth + tx(cx, cy + 52, it, 13, 14);
+    }).join('');
+  },
+  wave(items) {
+    const n = items.length, slot = 360 / n;
+    const tags = items.map((it, i) => { const w = Math.min(110, slot - 12), x = 20 + i * slot + (slot - w) / 2; return pill(x, 196, w, 34, it, PAL[i % PAL.length], 12); }).join('');
+    return `<path d="M20,120 C50,50 80,190 110,120 S170,50 200,120 S260,190 290,120 S350,50 380,120" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M20,150 C50,100 80,200 110,150 S170,100 200,150 S260,200 290,150 S350,100 380,150" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".8"/>` + tags;
+  },
+  rings(items) {
+    const r = [130, 90, 50], fills = ['#ffffff', '#ecdcff', '#ffc6de'];
+    const circles = r.map((rad, i) => `<circle cx="200" cy="140" r="${rad}" fill="${fills[i]}" stroke="${INK}" stroke-width="3"/>`).join('');
+    const labels = tx(200, 30, items[0], 13, 16) + tx(200, 70, items[1], 13, 14) + tx(200, 140, items[2], 13, 9);
+    return circles + labels;
+  },
+  cards(items) {
+    const n = items.length;
+    if (n === 4) return items.map((it, i) => { const x = i % 2 ? 212 : 32, y = i < 2 ? 52 : 146; return `<rect x="${x}" y="${y}" width="156" height="72" rx="16" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + tx(x + 78, y + 36, it, 13, 13); }).join('');
+    const h = 48, g = 14, y0 = 140 - (n * h + (n - 1) * g) / 2;
+    return items.map((it, i) => { const y = y0 + i * (h + g); return `<rect x="70" y="${y}" width="260" height="${h}" rx="16" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + tx(200, y + h / 2, it, 14, 24); }).join('');
+  }
+};
+function hubIn(c, items) { return R.hub(c, items); }
+
+/* escena principal de cada tema: [tipo, ...datos] */
+const DIB = {
+  operadores: ['hub', 'Booleanos', ['AND (Y)', 'OR (O)', 'NOT (NO)', 'Comillas']],
+  'atajos-word': ['cards', ['Archivos', 'Navegación', 'Formato']],
+  'atajos-excel': ['flow', ['Libro', 'Hoja', 'Celda']],
+  comunicacion: ['flow', ['Emisor', 'Mensaje', 'Canal', 'Receptor']],
+  expresion: ['cards', ['Oral', 'Escrita', 'Corporal', 'Artística']],
+  lenguaje: ['hub', 'Lenguaje', ['Pensamiento', 'Conocimiento', 'Vínculos', 'Normas']],
+  funciones: ['hub', 'Jakobson', ['Referencial', 'Emotiva', 'Conativa', 'Fática', 'Metalingüística', 'Poética']],
+  verbal: ['compare', ['Oral', 'Habla espontánea', 'Tono y gestos', 'Se dice al momento'], ['Escrito', 'Reglas gramaticales', 'Queda registrado', 'Se revisa']],
+  'noverbal-lenguaje': ['callouts', ['Mirada', 'Gestos', 'Distancia', 'Voz', 'Postura']],
+  registros: ['compare', ['Formal', 'Lenguaje cuidado', 'Usted', 'Contextos oficiales'], ['Informal', 'Lenguaje cotidiano', 'Tú', 'Confianza']],
+  redaccion: ['steps', ['Planear', 'Escribir', 'Revisar', 'Corregir']],
+  resumen: ['flow', ['Texto', 'Ideas clave', 'Resumen']],
+  sintesis: ['hub', 'Síntesis', ['Fuente 1', 'Fuente 2', 'Fuente 3', 'Idea propia']],
+  parafrasis: ['flow', ['Texto complejo', 'Palabras propias', 'Mismo sentido']],
+  argumento: ['steps', ['Premisa', 'Premisa', 'Conclusión']],
+  descripcion: ['compare', ['Objetiva', 'Hechos', 'Precisa', 'Sin emociones'], ['Subjetiva', 'Opiniones', 'Impresiones', 'Emociones']],
+  ensayo: ['layers', ['Introducción', 'Desarrollo', 'Conclusión']],
+  'estructura-ensayo': ['layers', ['Tesis', 'Argumentos', 'Cierre']],
+  'caracteristicas-ensayo': ['cards', ['Brevedad', 'Subjetividad', 'Estilo cuidado', 'Rigor académico']],
+  noverbal: ['hub', 'No verbal', ['Mirada', 'Gestos', 'Postura', 'Rostro', 'Distancia']],
+  contacto: ['callouts', ['Interés', 'Sinceridad', 'Turnos de habla']],
+  posturas: ['callouts', ['Abierta', 'Cerrada', 'Inclinada', 'Firme']],
+  gestos: ['cards', ['Emblemas', 'Ilustradores', 'Reguladores', 'Adaptadores']],
+  facial: ['faces', ['Alegría', 'Tristeza', 'Sorpresa', 'Enojo', 'Miedo', 'Asco']],
+  factual: ['compare', ['Factual', 'Datos verificables', 'Fuentes'], ['No factual', 'Ficción', 'Mitos', 'Subjetividad']],
+  paralinguistica: ['wave', ['Tono', 'Ritmo', 'Volumen', 'Pausas']],
+  'funciones-voz': ['cards', ['Informar', 'Persuadir', 'Identidad', 'Emocionar']],
+  'caracteristicas-voz': ['wave', ['Timbre', 'Intensidad', 'Resonancia']],
+  articulacion: ['flow', ['Respirar', 'Vocalizar', 'Articular', 'Pronunciar']],
+  nivel: ['rings', ['Cobertura', 'Periodo', 'Profundidad']],
+  fuentes: ['cards', ['Primarias', 'Secundarias', 'Terciarias', 'Bases de datos']],
+  estrategia: ['flow', ['Palabras clave', 'Operadores', 'Resultados']],
+  academico: ['cards', ['Artículos', 'Citas', 'Libros', 'Tesis']],
+  latindex: ['hub', 'Latindex', ['Latinoamérica', 'Caribe', 'España', 'Portugal']],
+  scielo: ['hub', 'SciELO', ['Acceso abierto', 'Texto completo', 'Cooperativa', 'Revistas']],
+  scopus: ['cards', ['Resúmenes', 'Citas', 'Métricas', 'Revisión por pares']],
+  procesadores: ['cards', ['Escribir', 'Dar formato', 'Tablas', 'Guardar']],
+  'aplicaciones-procesadores': ['steps', ['Título', 'Subtítulo', 'Texto', 'Cita APA']],
+  presentaciones: ['flow', ['Ideas', 'Diapositivas', 'Exposición']],
+  powerpoint: ['cards', ['Diapositivas', 'Plantillas', 'Animaciones']],
+  prezi: ['flow', ['Lienzo', 'Zoom', 'Ruta']],
+  canva: ['hub', 'Canva', ['Plantillas', 'Elementos', 'Colaboración']],
+  colaborativo: ['hub', 'Nube', ['Tiempo real', 'Historial', 'Comentarios', 'Compartir']],
+  copilot: ['flow', ['Redactar', 'Diapositivas', 'Revisar']],
+  gemini: ['hub', 'Gemini', ['Consulta', 'Documentos', 'Integración']],
+  'ia-responsable': ['cards', ['Verificar', 'Citar', 'Ética']],
+  cobertura: ['rings', ['Idioma', 'Geografía', 'Periodo']],
+};
+function dibujoTema(t, color) {
+  const d = DIB[t.id];
+  if (!d) return dibujo(t, color);
+  const [tipo, ...args] = d;
+  return frame(color, R[tipo](...args));
+}
+
+/* ---------- ilustraciones por tema (estilo de los ejemplos) ---------- */
+function gl(n, cx, cy) {
+  switch (n) {
+    case 'speech': return `<rect x="${cx-24}" y="${cy-18}" width="48" height="30" rx="12" fill="#ffc6de" stroke="${INK}" stroke-width="3"/><path d="M${cx-8},${cy+11} L${cx-14},${cy+22} L${cx+2},${cy+11}Z" fill="#ffc6de" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><line x1="${cx-13}" y1="${cy-6}" x2="${cx+13}" y2="${cy-6}" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><line x1="${cx-13}" y1="${cy+1}" x2="${cx+6}" y2="${cy+1}" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+    case 'warn': return `<path d="M${cx},${cy-22} L${cx+24},${cy+18} L${cx-24},${cy+18}Z" fill="#fff3b8" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><line x1="${cx}" y1="${cy-6}" x2="${cx}" y2="${cy+6}" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy+11}" r="2.5" fill="${INK}"/>`;
+    case 'image': return `<rect x="${cx-24}" y="${cy-18}" width="48" height="36" rx="6" fill="#ffffff" stroke="${INK}" stroke-width="3"/><path d="M${cx-18},${cy+12} L${cx-4},${cy-2} L${cx+4},${cy+6} L${cx+10},${cy} L${cx+18},${cy+12}Z" fill="#d9f5e7" stroke="${INK}" stroke-width="2"/><circle cx="${cx+12}" cy="${cy-8}" r="4" fill="#fff3b8"/>`;
+    case 'doc': return `<rect x="${cx-16}" y="${cy-22}" width="32" height="44" rx="5" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + [-12,-2,8].map(d => `<rect x="${cx-10}" y="${cy+d-2}" width="20" height="4" rx="2" fill="#ffc6de"/>`).join('');
+    case 'mic': return `<rect x="${cx-7}" y="${cy-24}" width="14" height="26" rx="7" fill="#ff9ec6" stroke="${INK}" stroke-width="3"/><path d="M${cx-16},${cy-2} Q${cx-16},${cy+16} ${cx},${cy+16} Q${cx+16},${cy+16} ${cx+16},${cy-2}" fill="none" stroke="${INK}" stroke-width="3"/><line x1="${cx}" y1="${cy+16}" x2="${cx}" y2="${cy+24}" stroke="${INK}" stroke-width="3"/><line x1="${cx-10}" y1="${cy+24}" x2="${cx+10}" y2="${cy+24}" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+    case 'bulb': return `<circle cx="${cx}" cy="${cy-4}" r="16" fill="#fff3b8" stroke="${INK}" stroke-width="3"/><rect x="${cx-7}" y="${cy+12}" width="14" height="9" rx="3" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>`;
+    case 'eye': return `<path d="M${cx-24},${cy} Q${cx},${cy-22} ${cx+24},${cy} Q${cx},${cy+22} ${cx-24},${cy}Z" fill="#ffffff" stroke="${INK}" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="8" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><circle cx="${cx}" cy="${cy}" r="3" fill="${INK}"/>`;
+    case 'hand': return `<rect x="${cx-16}" y="${cy-2}" width="32" height="24" rx="12" fill="#ffc6de" stroke="${INK}" stroke-width="3"/>` + [0,1,2,3].map(k => `<rect x="${cx-14+k*8}" y="${cy-16}" width="7" height="18" rx="3.5" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>`).join('');
+    case 'check': return `<circle cx="${cx}" cy="${cy}" r="20" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/><path d="M${cx-9},${cy} L${cx-3},${cy+7} L${cx+10},${cy-7}" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+    case 'person': return `<circle cx="${cx}" cy="${cy-12}" r="9" fill="#ffc6de" stroke="${INK}" stroke-width="3"/><rect x="${cx-13}" y="${cy-2}" width="26" height="24" rx="12" fill="#d7b9f5" stroke="${INK}" stroke-width="3"/>`;
+    case 'wave': return `<path d="M${cx-24},${cy} L${cx-16},${cy-12} L${cx-8},${cy+12} L${cx},${cy-16} L${cx+8},${cy+12} L${cx+16},${cy-12} L${cx+24},${cy}" fill="none" stroke="#ff9ec6" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>`;
+    default: return '';
+  }
+}
+function tarjeta(x, y, w, h, g, label) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + gl(g, x + w / 2, y + h * 0.42) + tx(x + w / 2, y + h - 18, label, 13, 14);
+}
+function burbuja(x, y, w, h, txt, fill) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="${fill}" stroke="${INK}" stroke-width="3"/><path d="M${x + w * 0.3},${y + h} L${x + w * 0.3 + 10},${y + h + 16} L${x + w * 0.3 + 20},${y + h}Z" fill="${fill}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>` + tx(x + w / 2, y + h / 2, txt, 15, 16);
+}
+const IR = {
+  grid4(items) {
+    return items.map((it, i) => tarjeta(i % 2 ? 210 : 30, i < 2 ? 24 : 150, 160, 110, it[0], it[1])).join('');
+  },
+  pair(lg, ll, ls, rg, rl, rs) {
+    const pc = (x, g, l, s) => `<rect x="${x}" y="40" width="160" height="200" rx="18" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + gl(g, x + 80, 100) + tx(x + 80, 160, l, 16, 14) + tx(x + 80, 192, s, 12, 20);
+    return `<line x1="200" y1="40" x2="200" y2="240" stroke="${INK}" stroke-width="2.5" stroke-dasharray="6 6"/>` + pc(24, lg, ll, ls) + pc(216, rg, rl, rs);
+  },
+  dialog(a, b, m1, m2) {
+    return burbuja(30, 40, 160, 60, m1, '#ffffff') + burbuja(210, 40, 160, 60, m2, '#ffe0ef') +
+      `<circle cx="110" cy="132" r="26" fill="#ffc6de" stroke="${INK}" stroke-width="3"/><rect x="80" y="160" width="60" height="70" rx="26" fill="#ffc6de" stroke="${INK}" stroke-width="3"/>` +
+      `<circle cx="290" cy="132" r="26" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/><rect x="260" y="160" width="60" height="70" rx="26" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>` +
+      tx(110, 252, a, 15, 14) + tx(290, 252, b, 15, 14);
+  },
+  bridge(i1, i2, conns) {
+    return `<rect x="0" y="210" width="400" height="70" fill="#ffe0ef"/>` +
+      `<path d="M0,210 Q70,150 140,210 Z" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/><path d="M260,210 Q330,150 400,210 Z" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>` +
+      `<path d="M140,205 Q200,110 260,205" fill="none" stroke="#e8a060" stroke-width="10" stroke-linecap="round"/><path d="M140,205 Q200,110 260,205" fill="none" stroke="#f7d7a0" stroke-width="4" stroke-dasharray="6 6"/>` +
+      pill(20, 124, 110, 30, i1, '#ffffff', 13) + pill(270, 124, 110, 30, i2, '#ffffff', 13) +
+      pill(30, 40, 100, 30, conns[0], '#ffc6de', 12) + pill(150, 40, 100, 30, conns[1], '#d7b9f5', 12) + pill(270, 40, 100, 30, conns[2], '#cfe8ff', 12);
+  },
+  bulb(orig, nuevo) {
+    const rayos = [[200,12,200,0],[160,22,152,14],[240,22,248,14]].map(r => `<line x1="${r[0]}" y1="${r[1]}" x2="${r[2]}" y2="${r[3]}" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`).join('');
+    return rayos + `<circle cx="200" cy="58" r="26" fill="#fff3b8" stroke="${INK}" stroke-width="3.5"/><rect x="188" y="82" width="24" height="12" rx="4" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>` +
+      `<line x1="200" y1="96" x2="110" y2="128" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 5"/><line x1="200" y1="96" x2="290" y2="128" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 5"/>` +
+      `<rect x="30" y="130" width="160" height="100" rx="16" fill="#ffe0ef" stroke="${INK}" stroke-width="3"/>` + tx(110, 180, orig, 13, 16) +
+      `<rect x="210" y="130" width="160" height="100" rx="16" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>` + tx(290, 180, nuevo, 13, 16) +
+      tx(110, 254, 'Original', 13, 14) + tx(290, 254, 'Paráfrasis', 13, 14);
+  }
+};
+const ILU = {
+  comunicacion: [['dialog', ['Emisor', 'Receptor', '¿Vienes hoy?', '¡Sí, ya voy!']], ['grid4', [['speech', 'Mensaje'], ['eye', 'Canal'], ['person', 'Emisor'], ['check', 'Receptor']]]],
+  expresion: [['grid4', [['mic', 'Oral'], ['doc', 'Escrita'], ['person', 'Corporal'], ['image', 'Artística']]], ['pair', ['speech', 'Expresar', 'ideas', 'eye', 'Sentir', 'emociones']]],
+  lenguaje: [['grid4', [['speech', 'Palabras'], ['hand', 'Señas'], ['warn', 'Señales'], ['image', 'Imágenes']]], ['pair', ['bulb', 'Pensamiento', 'ordenado', 'speech', 'Lengua', 'código común']]],
+  funciones: [['grid4', [['speech', 'Referencial'], ['eye', 'Emotiva'], ['warn', 'Conativa'], ['check', 'Fática']]], ['dialog', ['Emisor', 'Receptor', '¡Atención!', 'Entendido']]],
+  verbal: [['pair', ['mic', 'Oral', 'conversación, exposición', 'doc', 'Escrito', 'informe, ensayo, correo']], ['pair', ['speech', 'Oral', 'se va con el momento', 'doc', 'Escrito', 'permanece']]],
+  'noverbal-lenguaje': [['grid4', [['eye', 'Mirada'], ['hand', 'Gestos'], ['person', 'Distancia'], ['mic', 'Voz']]], ['dialog', ['Tú', 'Otra persona', 'Hola', '¡Hola!']]],
+  registros: [['pair', ['doc', 'Formal', 'Usted, contextos oficiales', 'speech', 'Informal', 'Tú, confianza']], ['grid4', [['doc', 'Oficial'], ['speech', 'Cotidiano'], ['person', 'Jerarquía'], ['check', 'Adecuado']]]],
+  redaccion: [['grid4', [['bulb', 'Planear'], ['doc', 'Escribir'], ['check', 'Revisar'], ['warn', 'Corregir']]], ['pair', ['doc', 'Borrador', 'primera versión', 'check', 'Texto final', 'claro y cohesivo']]],
+  resumen: [['pair', ['doc', 'Texto largo', 'muchas ideas', 'check', 'Resumen', 'ideas clave']], ['grid4', [['doc', 'Leer'], ['bulb', 'Idea clave'], ['doc', 'Redactar'], ['check', 'Revisar']]]],
+  sintesis: [['bridge', ['Fuente A', 'Fuente B', ['une', 'integra', 'concluye']]], ['pair', ['doc', 'Varias fuentes', 'información', 'doc', 'Síntesis', 'texto propio']]],
+  parafrasis: [['bulb', ['El ruido dificulta la comprensión.', 'Las interferencias impiden entender bien.']], ['pair', ['doc', 'Copiar y pegar', 'no es parafrasear', 'check', 'Tus palabras', 'y la cita']]],
+  argumento: [['pair', ['warn', 'Tesis', 'lo que defiendes', 'check', 'Pruebas', 'razones y datos']], ['bridge', ['Premisa', 'Conclusión', ['porque', 'por tanto', 'así']]]],
+  descripcion: [['pair', ['eye', 'Objetiva', 'hechos', 'speech', 'Subjetiva', 'opiniones']], ['grid4', [['image', 'Forma'], ['eye', 'Color'], ['doc', 'Tamaño'], ['check', 'Textura']]]],
+  ensayo: [['grid4', [['doc', 'Introducción'], ['doc', 'Desarrollo'], ['doc', 'Conclusión'], ['check', 'Citas']]], ['bridge', ['Tesis', 'Cierre', ['introducción', 'desarrollo', 'conclusión']]]],
+  'estructura-ensayo': [['grid4', [['doc', 'Tesis'], ['speech', 'Argumento'], ['check', 'Cierre'], ['bulb', 'Idea']]], ['pair', ['doc', 'Inicio', 'presenta el tema', 'check', 'Final', 'cierra la idea']]],
+  'caracteristicas-ensayo': [['pair', ['bulb', 'Breve', 'pocas páginas', 'speech', 'Subjetivo', 'tu opinión']], ['grid4', [['check', 'Brevedad'], ['speech', 'Subjetividad'], ['image', 'Estilo'], ['doc', 'Rigor']]]],
+  noverbal: [['dialog', ['Tú', 'Otra persona', '…', '¡Hola!']], ['pair', ['eye', 'Mirada', 'regula turnos', 'hand', 'Gestos', 'ilustran']]],
+  contacto: [['pair', ['eye', 'Mirada', 'muestra interés', 'check', 'Sinceridad', 'genera confianza']], ['dialog', ['Orador', 'Público', '¡Miren!', 'Atentos']]],
+  posturas: [['grid4', [['person', 'Abierta'], ['person', 'Cerrada'], ['person', 'Inclinada'], ['person', 'Firme']]], ['pair', ['person', 'Postura abierta', 'transmite apertura', 'person', 'Postura cerrada', 'transmite cautela']]],
+  gestos: [['grid4', [['hand', 'Emblemas'], ['hand', 'Ilustradores'], ['hand', 'Reguladores'], ['hand', 'Adaptadores']]], ['pair', ['hand', 'Gesto', 'apoya la palabra', 'speech', 'Palabra', 'el mensaje']]],
+  facial: [['pair', ['eye', 'Mirada', 'emociones', 'check', 'Rostro', 'universal']], ['grid4', [['eye', 'Alegría'], ['eye', 'Tristeza'], ['warn', 'Sorpresa'], ['warn', 'Enojo']]]],
+  factual: [['pair', ['check', 'Factual', 'datos verificables', 'warn', 'No factual', 'mitos y ficción']], ['grid4', [['doc', 'Dato'], ['check', 'Fuente'], ['image', 'Ejemplo'], ['warn', 'Mito']]]],
+  paralinguistica: [['grid4', [['wave', 'Tono'], ['wave', 'Ritmo'], ['wave', 'Volumen'], ['wave', 'Pausas']]], ['pair', ['mic', 'Voz', 'transmite emoción', 'wave', 'Ritmo', 'marca el mensaje']]],
+  'funciones-voz': [['grid4', [['speech', 'Informar'], ['warn', 'Persuadir'], ['person', 'Identidad'], ['eye', 'Emocionar']]], ['pair', ['mic', 'Voz clara', 'se entiende', 'speech', 'Voz firme', 'convence']]],
+  'caracteristicas-voz': [['pair', ['mic', 'Timbre', 'color de la voz', 'wave', 'Intensidad', 'fuerza del sonido']], ['grid4', [['mic', 'Timbre'], ['wave', 'Intensidad'], ['bulb', 'Resonancia'], ['check', 'Calidad']]]],
+  articulacion: [['pair', ['mic', 'Dicción', 'pronunciar bien', 'check', 'Claridad', 'sin errores']], ['grid4', [['mic', 'Respirar'], ['speech', 'Vocalizar'], ['check', 'Articular'], ['wave', 'Pronunciar']]]],
+  nivel: [['pair', ['bulb', 'Nivel general', 'panorama', 'check', 'Nivel especializado', 'detalle']], ['grid4', [['check', 'Nivel'], ['eye', 'Filtro'], ['bulb', 'Propósito'], ['doc', 'Tipo']]]],
+  cobertura: [['pair', ['check', 'Cobertura amplia', 'muchos temas', 'warn', 'Cobertura estrecha', 'pocos temas']], ['grid4', [['image', 'Periodo'], ['eye', 'Geografía'], ['speech', 'Idioma'], ['doc', 'Fuentes']]]],
+  fuentes: [['grid4', [['doc', 'Primarias'], ['doc', 'Secundarias'], ['doc', 'Terciarias'], ['check', 'Bases']]], ['pair', ['doc', 'Primaria', 'original', 'doc', 'Secundaria', 'análisis']]],
+  estrategia: [['bridge', ['Palabras clave', 'Resultados', ['AND', 'OR', 'NOT']]], ['grid4', [['speech', 'Término'], ['check', 'AND'], ['warn', 'NOT'], ['image', 'OR']]]],
+  academico: [['grid4', [['doc', 'Artículos'], ['doc', 'Citas'], ['doc', 'Libros'], ['doc', 'Tesis']]], ['pair', ['eye', 'Buscar', 'en Google', 'check', 'Citar', 'fuentes']]],
+  latindex: [['grid4', [['image', 'Latinoamérica'], ['image', 'Caribe'], ['image', 'España'], ['image', 'Portugal']]], ['pair', ['doc', 'Revista', 'catalogada', 'check', 'Calidad', 'evaluada']]],
+  scielo: [['grid4', [['check', 'Acceso abierto'], ['doc', 'Texto completo'], ['person', 'Red'], ['doc', 'Revistas']]], ['pair', ['doc', 'Artículo', 'texto completo', 'check', 'Acceso', 'libre']]],
+  scopus: [['grid4', [['doc', 'Resúmenes'], ['check', 'Citas'], ['bulb', 'Métricas'], ['person', 'Pares']]], ['pair', ['check', 'Revisada', 'por pares', 'doc', 'Resumen', 'y citas']]],
+  operadores: [['bridge', ['Término 1', 'Término 2', ['AND', 'OR', 'NOT']]], ['grid4', [['check', 'AND'], ['speech', 'OR'], ['warn', 'NOT'], ['speech', 'Comillas']]]],
+  procesadores: [['grid4', [['doc', 'Escribir'], ['bulb', 'Formato'], ['check', 'APA'], ['image', 'Tablas']]], ['pair', ['doc', 'Word', 'escribir', 'check', 'Guardar', 'archivo']]],
+  'aplicaciones-procesadores': [['grid4', [['doc', 'Índices'], ['image', 'Tablas'], ['doc', 'Plantillas'], ['check', 'Títulos']]], ['pair', ['doc', 'Desde cero', 'sin plantilla', 'check', 'Con plantilla', 'rápido']]],
+  'atajos-word': [['grid4', [['check', 'Ctrl+N'], ['check', 'Ctrl+O'], ['check', 'Ctrl+S'], ['eye', 'Ctrl+Fin']]], ['pair', ['hand', 'Ratón', 'lento', 'check', 'Teclado', 'rápido']]],
+  'atajos-excel': [['grid4', [['image', 'Celda'], ['check', 'Ctrl+W'], ['doc', 'Hoja'], ['check', 'Alt+Intro']]], ['pair', ['hand', 'Ratón', 'lento', 'check', 'Atajos', 'rápido']]],
+  presentaciones: [['pair', ['speech', 'Exposición oral', 'apoyo', 'image', 'Diapositiva', 'visual']], ['grid4', [['image', 'Síntesis'], ['eye', 'Apoyo'], ['bulb', 'Impacto'], ['doc', 'Ideas']]]],
+  powerpoint: [['grid4', [['doc', 'Diapositivas'], ['image', 'Plantillas'], ['wave', 'Animaciones'], ['check', 'Presentar']]], ['pair', ['doc', 'Texto', 'en la diapositiva', 'image', 'Imagen', 'en la diapositiva']]],
+  prezi: [['pair', ['image', 'Lienzo', 'una superficie', 'eye', 'Zoom', 'relaciones']], ['grid4', [['bulb', 'Lienzo'], ['eye', 'Zoom'], ['check', 'Ruta'], ['doc', 'Ideas']]]],
+  canva: [['grid4', [['image', 'Plantillas'], ['bulb', 'Elementos'], ['person', 'Colaboración'], ['check', 'Descarga']]], ['pair', ['doc', 'Diseño en blanco', 'desde cero', 'check', 'Plantilla', 'rápida']]],
+  colaborativo: [['pair', ['person', 'Una persona', 'escribe', 'person', 'Otras personas', 'comentan']], ['grid4', [['wave', 'Tiempo real'], ['doc', 'Historial'], ['speech', 'Comentarios'], ['person', 'Compartir']]]],
+  copilot: [['dialog', ['Tú', 'Copilot', 'Redacta esto', 'Listo, borrador']], ['grid4', [['speech', 'Redactar'], ['image', 'Diapositivas'], ['check', 'Revisar'], ['bulb', 'Ideas']]]],
+  gemini: [['dialog', ['Tú', 'Gemini', '¿Qué es…?', 'Te explico']], ['pair', ['speech', 'Consulta', 'en lenguaje natural', 'doc', 'Documento', 'resumen']]],
+  'ia-responsable': [['grid4', [['check', 'Verificar'], ['doc', 'Citar'], ['warn', 'Ética'], ['eye', 'Revisar']]], ['pair', ['warn', 'Sin revisar', 'copiar', 'check', 'Verificado', 'y citado']]]
+};
+
+/* ---------- información ampliada por tema ---------- */
+const AMP = {
+ "comunicacion": [
+  "La comunicación es el proceso mediante el cual una persona transmite un mensaje a otra usando un código compartido. Ocurre siempre que hay intercambio de información, aunque sea involuntario.",
+  [
+   "El emisor codifica la idea en un mensaje con un código común.",
+   "El canal es el medio por donde viaja el mensaje, como la voz o un correo.",
+   "El receptor decodifica el mensaje y responde, cerrando el ciclo.",
+   "El ruido es cualquier interferencia que distorsiona el mensaje."
+  ]
+ ],
+ "expresion": [
+  "La expresión es la manifestación de pensamientos, emociones y creatividad hacia otras personas. Puede ser oral, escrita, corporal o artística.",
+  [
+   "La expresión oral usa la voz y se adapta al público en tiempo real.",
+   "La expresión escrita organiza las ideas en textos que permanecen.",
+   "La expresión corporal usa gestos y postura para acompañar el mensaje.",
+   "La expresión artística transmite emociones mediante imágenes, música o danza."
+  ]
+ ],
+ "lenguaje": [
+  "El lenguaje es la capacidad humana de usar signos para pensar y comunicarse. Se apoya en sistemas como las palabras, las señas, las señales y las imágenes.",
+  [
+   "El lenguaje permite organizar el pensamiento abstracto.",
+   "La lengua es el sistema de signos compartido por una comunidad.",
+   "Las palabras, señas, señales e imágenes son distintos sistemas de signos.",
+   "El lenguaje también transmite normas y vínculos sociales."
+  ]
+ ],
+ "funciones": [
+  "Roman Jakobson describió seis funciones del lenguaje, según el elemento de la comunicación que se destaca. Un mismo mensaje puede cumplir varias funciones a la vez.",
+  [
+   "Referencial: informa sobre el contexto o la realidad.",
+   "Emotiva: expresa el estado de ánimo de quien habla.",
+   "Conativa: busca influir en el receptor, con órdenes o preguntas.",
+   "Fática, metalingüística y poética completan el modelo de Jakobson."
+  ]
+ ],
+ "verbal": [
+  "El lenguaje verbal usa palabras, habladas o escritas, bajo reglas gramaticales compartidas. Transmite el mensaje directamente mediante signos lingüísticos.",
+  [
+   "La forma oral es espontánea, se ajusta al momento y usa tono y pausas.",
+   "La forma escrita sigue normas ortográficas y gramaticales y queda registrada.",
+   "En la oralidad el mensaje puede corregirse de inmediato con gestos.",
+   "En la escritura conviene revisar el texto antes de enviarlo."
+  ]
+ ],
+ "noverbal-lenguaje": [
+  "La comunicación no verbal transmite mensajes con el cuerpo, la mirada, la distancia y los objetos, sin usar palabras. Muchas veces dice más que la voz.",
+  [
+   "La mirada regula los turnos de la conversación y muestra interés.",
+   "Los gestos acompañan, refuerzan o reemplazan palabras.",
+   "La distancia entre personas expresa confianza o formalidad.",
+   "Los objetos y la vestimenta también comunican un mensaje."
+  ]
+ ],
+ "registros": [
+  "El lenguaje cambia según el contexto sociocultural y la relación entre quienes hablan. Este ajuste se llama registro y puede ser formal o informal.",
+  [
+   "El registro formal se usa en contextos oficiales, con vocabulario cuidado.",
+   "El registro informal se usa con amigos y familia, con expresiones cotidianas.",
+   "La jerarquía entre hablantes influye en el tratamiento y el tono.",
+   "Elegir bien el registro evita malentendidos y muestra respeto."
+  ]
+ ],
+ "redaccion": [
+  "La redacción es la capacidad de organizar un texto escrito con claridad, coherencia y cohesión. Se desarrolla en etapas: planificar, escribir, revisar y corregir.",
+  [
+   "Planificar implica definir el propósito, el destinatario y las ideas principales.",
+   "Escribir un borrador permite plasmar las ideas sin preocuparse por la forma.",
+   "Revisar detecta errores de sentido, de orden y de coherencia.",
+   "Corregir pule la ortografía, la puntuación y el estilo del texto."
+  ]
+ ],
+ "resumen": [
+  "El resumen es una síntesis objetiva y fiel de un texto que reduce su extensión sin perder las ideas fundamentales. Conserva el orden lógico del autor.",
+  [
+   "Primero se lee el texto completo para entender su idea general.",
+   "Después se identifican las ideas principales y se descartan los ejemplos.",
+   "El resumen se redacta con palabras propias y con la extensión mínima necesaria.",
+   "Si se usa información del autor original, se le debe citar."
+  ]
+ ],
+ "sintesis": [
+  "La síntesis reúne ideas de varias fuentes y las presenta en un texto nuevo, con palabras propias. Exige una lectura profunda e integrar lo que dicen los autores.",
+  [
+   "Se comparan las ideas de cada fuente para encontrar coincidencias y diferencias.",
+   "Se organiza una idea central que guía el texto nuevo.",
+   "Se escribe con palabras propias y se cita a cada autor.",
+   "La síntesis va más allá de resumir: integra y concluye."
+  ]
+ ],
+ "parafrasis": [
+  "La paráfrasis explica un texto complejo con palabras más sencillas, manteniendo su significado original. No es copiar ni cambiar solo algunas palabras.",
+  [
+   "Se lee el texto hasta comprender su sentido completo.",
+   "Se reescribe la idea con otra estructura y vocabulario propio.",
+   "Se conserva el significado original sin añadir opiniones propias.",
+   "Se cita al autor, porque la idea sigue siendo suya."
+  ]
+ ],
+ "argumento": [
+  "Un argumento defiende una tesis con premisas y una conclusión que se deriva de ellas. Un buen argumento es coherente, se apoya en pruebas y responde a objeciones.",
+  [
+   "La tesis es la afirmación central que se quiere defender.",
+   "Las premisas son razones o pruebas que sostienen la tesis.",
+   "La conclusión se desprende de las premisas y reafirma la tesis.",
+   "Un argumento sólido anticipa y responde las objeciones."
+  ]
+ ],
+ "descripcion": [
+  "La descripción explica cómo es una persona, un objeto o un lugar mediante la enumeración de sus rasgos. Puede ser objetiva, con datos precisos, o subjetiva, con impresiones personales.",
+  [
+   "La descripción objetiva se basa en datos verificables y medibles.",
+   "La descripción subjetiva refleja impresiones y sentimientos de quien escribe.",
+   "Enumerar rasgos como forma, color, tamaño y textura ordena la descripción.",
+   "Elegir el tipo de descripción depende del propósito del texto."
+  ]
+ ],
+ "ensayo": [
+  "El ensayo es un texto en prosa que analiza y evalúa un tema con rigor académico y una postura del autor. Combina el razonamiento con un estilo cuidado.",
+  [
+   "Presenta una tesis clara y la defiende a lo largo del texto.",
+   "Usa argumentos y citas de fuentes confiables.",
+   "Mantiene una estructura de introducción, desarrollo y conclusión.",
+   "Admite una mirada personal, pero siempre fundamentada."
+  ]
+ ],
+ "estructura-ensayo": [
+  "Un ensayo se organiza en tres partes: introducción, desarrollo y conclusión. Cada parte cumple una función y todas se conectan por un hilo conductor.",
+  [
+   "La introducción presenta el tema, el contexto y la tesis.",
+   "El desarrollo expone los argumentos, uno por párrafo, con sus pruebas.",
+   "La conclusión retoma la tesis y resume lo demostrado.",
+   "Los conectores unen las ideas entre párrafos y dan coherencia."
+  ]
+ ],
+ "caracteristicas-ensayo": [
+  "El ensayo se distingue de otros textos académicos por su brevedad, su subjetividad y su cuidado estilístico. Aun así, mantiene rigor al sustentar sus ideas.",
+  [
+   "Es breve y se centra en un tema concreto.",
+   "Admite la opinión del autor, siempre que se sustente.",
+   "Cuida el estilo y la claridad de la expresión.",
+   "Se basa en fuentes y razonamientos, no solo en intuiciones."
+  ]
+ ],
+ "noverbal": [
+  "La comunicación no verbal transmite mensajes mediante comportamientos corporales, sin palabras. Acompaña a la comunicación verbal y, a veces, la sustituye.",
+  [
+   "Incluye la mirada, los gestos, la postura, el rostro y la distancia.",
+   "Puede confirmar, contradecir o reforzar lo que se dice.",
+   "Varía según la cultura, por lo que conviene interpretarla en contexto.",
+   "Se mejora con la práctica frente a un público."
+  ]
+ ],
+ "contacto": [
+  "El contacto visual muestra interés y sinceridad, y ayuda a regular los turnos de la conversación. Mirar al público de forma repartida hace sentir incluido a cada oyente.",
+  [
+   "Mirar a la audiencia transmite seguridad y cercanía.",
+   "Evitar la mirada puede interpretarse como inseguridad o falta de interés.",
+   "Las miradas breves y repartidas son más eficaces que una sola mirada fija.",
+   "Ayuda a saber cuándo otra persona quiere intervenir."
+  ]
+ ],
+ "posturas": [
+  "La postura del cuerpo proyecta seguridad, apertura o firmeza. Una postura abierta invita a la participación, mientras que una cerrada puede transmitir distancia.",
+  [
+   "Los brazos abiertos y los hombros relajados transmiten apertura.",
+   "Cruzar los brazos puede interpretarse como cierre o defensa.",
+   "Inclinarse levemente hacia el público muestra interés.",
+   "Mantener el peso equilibrado da una imagen de firmeza."
+  ]
+ ],
+ "gestos": [
+  "Los gestos de manos y brazos sirven para ilustrar, enfatizar o sustituir palabras. Se clasifican en emblemas, ilustradores, reguladores y adaptadores.",
+  [
+   "Los emblemas tienen un significado directo, como el pulgar arriba.",
+   "Los ilustradores acompañan y muestran lo que se dice.",
+   "Los reguladores ordenan la conversación, como levantar la mano.",
+   "Los adaptadores son gestos de ajuste nervioso, como tocarse el cabello."
+  ]
+ ],
+ "facial": [
+  "Los movimientos del rostro comunican emociones básicas y universales, como la alegría, la tristeza, la sorpresa o el enojo. Las cejas, los ojos y la boca son los principales indicadores.",
+  [
+   "La alegría se muestra con sonrisa y mejillas elevadas.",
+   "La tristeza se expresa con la boca hacia abajo y la mirada baja.",
+   "La sorpresa abre los ojos y la boca de forma repentina.",
+   "Las microexpresiones duran apenas instantes y revelan emociones ocultas."
+  ]
+ ],
+ "factual": [
+  "Un mensaje factual se apoya en datos verificables, mientras que uno no factual se basa en ficción, mitos o subjetividad. Distinguirlos es clave para informarse bien.",
+  [
+   "Un dato factual puede comprobarse con fuentes confiables.",
+   "La ficción crea historias que no pretenden describir la realidad.",
+   "Los mitos son creencias aceptadas sin pruebas comprobables.",
+   "Antes de compartir una información conviene verificar su fuente."
+  ]
+ ],
+ "paralinguistica": [
+  "La paralingüística estudia los elementos vocales que acompañan al mensaje, como el tono, el ritmo, el volumen y las pausas. Estos elementos cambian el sentido de lo que se dice.",
+  [
+   "El tono sube o baja para mostrar pregunta, sorpresa o énfasis.",
+   "El ritmo indica la velocidad con que se habla.",
+   "El volumen ayuda a enfatizar o a transmitir cercanía.",
+   "Las pausas separan ideas y dan tiempo para comprender."
+  ]
+ ],
+ "funciones-voz": [
+  "La voz cumple varias funciones: transmite información, persuade al público y refleja la identidad de quien habla. Usarla bien hace que el mensaje sea más claro y creíble.",
+  [
+   "La función informativa transmite datos con claridad.",
+   "La función persuasiva busca convencer mediante el énfasis y el ritmo.",
+   "La voz muestra la identidad y la personalidad del hablante.",
+   "Una voz clara genera confianza en quien escucha."
+  ]
+ ],
+ "caracteristicas-voz": [
+  "El timbre, la intensidad y la resonancia determinan la calidad de la voz durante una exposición. Cada característica puede entrenarse con ejercicios de respiración y vocalización.",
+  [
+   "El timbre es el color particular de cada voz.",
+   "La intensidad es la fuerza con que se emite el sonido.",
+   "La resonancia amplifica la voz en la cavidad de la boca y la nariz.",
+   "Respirar desde el diafragma mejora la proyección de la voz."
+  ]
+ ],
+ "articulacion": [
+  "La articulación es la pronunciación clara y definida de los sonidos mediante los órganos fonoarticulatorios, como labios, lengua y dientes. Una buena dicción evita confusiones.",
+  [
+   "Articular bien exige mover labios y lengua con precisión.",
+   "La dicción correcta consiste en pronunciar cada palabra completa.",
+   "Vocalizar con ejercicios mejora la agilidad de la boca.",
+   "Una pronunciación clara facilita la comprensión del público."
+  ]
+ ],
+ "nivel": [
+  "Antes de buscar información se define el nivel de la búsqueda, es decir, qué tan general o especializada debe ser. Esta decisión orienta qué fuentes conviene consultar.",
+  [
+   "Un nivel general sirve para obtener un panorama del tema.",
+   "Un nivel especializado busca estudios y datos detallados.",
+   "El filtro acota resultados por tipo de documento, año o idioma.",
+   "Definir el propósito evita buscar más de lo necesario."
+  ]
+ ],
+ "cobertura": [
+  "La cobertura indica el alcance de una búsqueda: el periodo, las regiones y los idiomas que se incluyen. Una cobertura bien definida evita resultados demasiado amplios o insuficientes.",
+  [
+   "La cobertura temporal define los años que interesan.",
+   "La cobertura geográfica define los países o regiones de las fuentes.",
+   "La cobertura idiomática define las lenguas de los documentos.",
+   "Una cobertura demasiado estrecha puede dejar fuera información útil."
+  ]
+ ],
+ "fuentes": [
+  "Las fuentes de información se clasifican según su nivel de elaboración. Las primarias contienen datos originales, las secundarias los analizan y las terciarias los recopilan.",
+  [
+   "Las fuentes primarias incluyen documentos originales, datos y testimonios directos.",
+   "Las fuentes secundarias interpretan o analizan información primaria.",
+   "Las fuentes terciarias organizan información de otras fuentes, como enciclopedias.",
+   "Las bases de datos especializadas reúnen fuentes revisadas y confiables."
+  ]
+ ],
+ "estrategia": [
+  "Una estrategia de búsqueda combina términos clave con operadores booleanos para obtener resultados precisos. Planificarla antes de buscar ahorra tiempo y mejora la calidad.",
+  [
+   "Se identifican palabras clave y sinónimos del tema.",
+   "Los operadores AND, OR y NOT relacionan los términos.",
+   "Las comillas buscan una frase exacta.",
+   "Se revisan y ajustan los resultados según su utilidad."
+  ]
+ ],
+ "academico": [
+  "Google Académico es un buscador especializado y de acceso libre para literatura científica, tesis, libros y artículos. Permite ver cuántas veces ha sido citado un trabajo.",
+  [
+   "Reúne artículos de revistas, tesis y libros académicos.",
+   "Muestra las citas que recibe cada publicación.",
+   "Permite crear alertas para seguir un tema.",
+   "No todos sus resultados tienen texto completo, así que conviene verificar el acceso."
+  ]
+ ],
+ "latindex": [
+  "Latindex es un sistema regional de información sobre revistas científicas de América Latina, el Caribe, España y Portugal. Permite conocer qué revistas cumplen criterios de calidad editorial.",
+  [
+   "Funciona como un catálogo de revistas científicas de la región.",
+   "Evalúa las revistas según criterios editoriales y científicos.",
+   "Facilita encontrar publicaciones iberoamericanas confiables.",
+   "Su información ayuda a elegir dónde publicar o citar."
+  ]
+ ],
+ "scielo": [
+  "SciELO es una biblioteca electrónica cooperativa de revistas científicas de acceso abierto y texto completo. Reúne publicaciones principalmente de Iberoamérica.",
+  [
+   "El acceso es gratuito y los textos se leen completos.",
+   "Es una red cooperativa de colecciones nacionales.",
+   "Incluye revistas revisadas por pares de la región.",
+   "Sus artículos se pueden citar con los datos de la publicación."
+  ]
+ ],
+ "scopus": [
+  "Scopus es una base bibliográfica de resúmenes y citas de literatura revisada por pares, con métricas de impacto internacional. Es de pago, aunque muchas universidades la ofrecen.",
+  [
+   "Indexa resúmenes y referencias de revistas revisadas por pares.",
+   "Permite analizar las citas que recibe un autor o una revista.",
+   "Ofrece métricas de impacto de publicaciones y autores.",
+   "Se accede con una suscripción institucional o cuenta autorizada."
+  ]
+ ],
+ "operadores": [
+  "Los operadores booleanos AND, OR y NOT conectan palabras clave para ampliar, reducir o excluir resultados en bases de datos y buscadores. Vienen del álgebra de Boole, que trabaja con dos valores: verdadero o falso.",
+  [
+   "AND devuelve resultados con todos los términos, por lo que restringe la búsqueda.",
+   "OR devuelve resultados con al menos uno de los términos, por lo que amplía la búsqueda.",
+   "NOT excluye un término: el resultado debe tener el primero y no el segundo.",
+   "Las comillas y los paréntesis ayudan a agrupar frases y combinaciones."
+  ]
+ ],
+ "procesadores": [
+  "Los procesadores de texto permiten crear, editar, dar formato e imprimir documentos. Word es el más usado y sirve para redactar desde cartas hasta trabajos académicos.",
+  [
+   "Permiten escribir y corregir texto con herramientas de edición.",
+   "Ofrecen formatos de fuente, párrafo, color y alineación.",
+   "Incluyen herramientas para normas de citación como APA.",
+   "Guardan documentos en formatos compatibles para compartirlos."
+  ]
+ ],
+ "aplicaciones-procesadores": [
+  "En el ámbito profesional y académico, los procesadores de texto se usan para crear informes, tesis y documentos oficiales. Índices, tablas y plantillas aceleran el trabajo.",
+  [
+   "Los índices automáticos ordenan los títulos y sus páginas.",
+   "Las tablas organizan datos y comparan información.",
+   "Las plantillas dan un formato uniforme a documentos repetitivos.",
+   "Los estilos de título permiten crear esquemas claros y navegables."
+  ]
+ ],
+ "atajos-word": [
+  "Los atajos de teclado ejecutan comandos de Word sin usar el ratón. Dominar los principales ahorra tiempo al redactar y dar formato a los documentos.",
+  [
+   "Ctrl+N crea un documento nuevo y Ctrl+O abre uno existente.",
+   "Ctrl+S guarda el documento y evita perder cambios.",
+   "Ctrl+Inicio y Ctrl+Fin llevan al principio y al final del documento.",
+   "Ctrl+Mayús+V pega solo el formato copiado, y Ctrl+K inserta un enlace."
+  ]
+ ],
+ "atajos-excel": [
+  "Los atajos de Excel permiten moverse entre celdas y hojas, seleccionar datos y trabajar con libros sin depender del ratón. Son útiles cuando se maneja mucha información.",
+  [
+   "Ctrl+W cierra el libro activo.",
+   "Ctrl+AvPág y Ctrl+RePág cambian de hoja dentro del libro.",
+   "Ctrl+Espacio selecciona la columna completa y Mayús+Espacio la fila completa.",
+   "Alt+Intro inserta un salto de línea dentro de una celda."
+  ]
+ ],
+ "presentaciones": [
+  "Las presentaciones son recursos visuales que sintetizan conceptos y apoyan una exposición oral. Su función es acompañar al orador, no reemplazarlo.",
+  [
+   "Una diapositiva debe tener pocas ideas, claras y bien organizadas.",
+   "Las imágenes y los gráficos ayudan a recordar mejor el contenido.",
+   "El texto en la diapositiva resume; el orador explica.",
+   "Usar un solo estilo visual mantiene la atención del público."
+  ]
+ ],
+ "powerpoint": [
+  "PowerPoint es el software de Microsoft para crear diapositivas con títulos, texto, imágenes, gráficos y animaciones. Es el programa clásico para presentaciones en muchas instituciones.",
+  [
+   "Las diapositivas se organizan en secuencia lineal.",
+   "Las plantillas y los temas dan un diseño uniforme.",
+   "Las transiciones y animaciones muestran los elementos en orden.",
+   "Permite exportar la presentación a PDF para compartirla."
+  ]
+ ],
+ "prezi": [
+  "Prezi es una herramienta de presentación que usa un lienzo único, con navegación tipo zoom, en lugar de diapositivas tradicionales. Permite mostrar cómo se relacionan las ideas entre sí.",
+  [
+   "Todo el contenido se coloca en una sola superficie.",
+   "El zoom acerca y aleja la vista para mostrar detalles y conjuntos.",
+   "Una ruta marca el orden de la exposición.",
+   "El movimiento constante conviene dosificarlo para no cansar al público."
+  ]
+ ],
+ "canva": [
+  "Canva es una plataforma de diseño en la nube con plantillas para presentaciones, carteles, infografías y redes sociales. Su biblioteca de elementos facilita crear piezas sin experiencia técnica.",
+  [
+   "Tiene plantillas listas para editar en pocos clics.",
+   "Incluye biblioteca de imágenes, íconos y formas.",
+   "Permite trabajar en equipo y compartir el diseño en línea.",
+   "Exporta los diseños en formatos como PDF o imagen."
+  ]
+ ],
+ "colaborativo": [
+  "Las presentaciones colaborativas se crean en la nube y permiten que varias personas editen al mismo tiempo. Guardan el historial de versiones, lo que facilita revisar cambios.",
+  [
+   "Varias personas editan el mismo documento en tiempo real.",
+   "El historial de versiones permite volver a una versión anterior.",
+   "Los comentarios sirven para revisar y dar retroalimentación.",
+   "Los archivos quedan guardados en la nube y se comparten con un enlace."
+  ]
+ ],
+ "copilot": [
+  "Copilot es el asistente de inteligencia artificial de Microsoft, integrado en Word, PowerPoint y Excel. Puede proponer borradores, resumir textos y ayudar a organizar presentaciones.",
+  [
+   "En Word ayuda a redactar y reescribir párrafos a partir de instrucciones.",
+   "En PowerPoint puede crear o resumir diapositivas a partir de un texto.",
+   "Sus respuestas deben revisarse, porque pueden contener errores.",
+   "Conviene indicar al asistente el contexto y el propósito del texto."
+  ]
+ ],
+ "gemini": [
+  "Gemini es el modelo de inteligencia artificial de Google. Sirve para conversar, resumir textos, explicar temas y apoyar la escritura y la investigación.",
+  [
+   "Responde preguntas en lenguaje natural y explica conceptos.",
+   "Puede resumir textos largos que se le entregan.",
+   "Se integra con herramientas de Google, como Documentos y Presentaciones.",
+   "Como otros modelos, puede equivocarse, así que conviene verificarlo."
+  ]
+ ],
+ "ia-responsable": [
+  "El uso responsable de la inteligencia artificial exige verificar la información, citar las fuentes y declarar cuándo se usó la herramienta. Usarla sin revisión puede generar errores o plagio.",
+  [
+   "Cada dato generado por IA debe contrastarse con fuentes confiables.",
+   "Las ideas propias deben distinguirse de las sugeridas por la herramienta.",
+   "Se debe citar las fuentes consultadas y declarar el uso de la IA según la norma.",
+   "Presentar como propio un texto generado sin revisión es una falta ética."
+  ]
+ ]
+};
+function corto(b) { const c = b.split(/[,.;:]/)[0]; if (c.length <= 26) return c; const w = c.slice(0, 27).split(' '); w.pop(); return w.join(' '); }
+
+/* ---------- ilustraciones dinámicas y creativas por tema ---------- */
+function estrella(cx, cy, r, cls) {
+  let d = '';
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ',' + (cy + rr * Math.sin(a)).toFixed(1); }
+  return `<path class="${cls || ''}" d="${d}Z" fill="#fff3b8" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`;
+}
+const NR = {
+  escenario(t, items) {
+    const lineas = items.slice(0, 4).map((it, i) => `<circle cx="84" cy="${86 + i * 20}" r="4" fill="#ff9ec6"/>` + tx(200, 86 + i * 20, it, 12, 30)).join('');
+    return `<polygon points="200,0 120,150 280,150" fill="#fff3b8" opacity=".55"/>` +
+      `<rect x="48" y="26" width="300" height="130" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + tx(200, 50, t, 14, 26) + lineas +
+      `<rect x="190" y="156" width="20" height="40" fill="${INK}"/><rect x="160" y="194" width="80" height="10" rx="5" fill="${INK}"/>` +
+      `<g class="flota"><circle cx="330" cy="186" r="18" fill="#ffc6de" stroke="${INK}" stroke-width="3"/><rect x="312" y="204" width="36" height="46" rx="16" fill="#d7b9f5" stroke="${INK}" stroke-width="3"/><line x1="312" y1="222" x2="282" y2="200" stroke="${INK}" stroke-width="6" stroke-linecap="round"/></g>` +
+      `<rect x="0" y="252" width="400" height="28" fill="#ffe0ef"/>`;
+  },
+  lupa(t, items) {
+    const docs = [2, 1, 0].map(i => `<rect x="${34 + i * 12}" y="${46 + i * 10}" width="150" height="120" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3"/>`).join('');
+    const lineas = [0, 1, 2, 3].map(k => `<rect x="${52}" y="${96 + k * 14}" width="${[110, 90, 100, 70][k]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('');
+    return docs + lineas + tx(109, 84, t, 13, 14) +
+      `<g class="flota"><circle cx="262" cy="110" r="44" fill="#cfe8ff" fill-opacity=".65" stroke="${INK}" stroke-width="4"/><line x1="296" y1="144" x2="330" y2="178" stroke="${INK}" stroke-width="11" stroke-linecap="round"/>` + tx(262, 110, items[0] || '', 12, 12) + `</g>` +
+      items.slice(1, 4).map((it, i) => pill(24 + i * 124, 212, 112, 30, it, PAL[(i + 1) % PAL.length], 11)).join('');
+  },
+  camino(t, items) {
+    const pts = [[38, 196], [140, 170], [262, 118], [366, 92]];
+    const pistas = items.slice(0, 4).map((it, i) => `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="15" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3"/>` + `<text x="${pts[i][0]}" y="${pts[i][1] + 5}" font-size="13" text-anchor="middle" font-family="Fredoka, sans-serif" fill="${INK}">${i + 1}</text>` + tx(pts[i][0], pts[i][1] + (i % 2 ? -26 : 34), it, 11, 13)).join('');
+    return tx(200, 28, t, 15, 24) + `<path d="M30,200 C80,200 100,170 140,170 C180,170 220,120 262,120 C300,120 340,90 370,92" fill="none" stroke="${INK}" stroke-width="4" stroke-dasharray="8 7" stroke-linecap="round"/>` + pistas;
+  },
+  globos(t, items) {
+    const xs = [84, 200, 316], ys = [118, 92, 124];
+    const cuerpos = items.slice(0, 3).map((it, i) => `<g class="flota" style="animation-delay:${i * 0.4}s"><line x1="${xs[i]}" y1="${ys[i] + 50}" x2="${xs[i]}" y2="${ys[i] + 70}" stroke="${INK}" stroke-width="2"/><rect x="${xs[i] - 10}" y="${ys[i] + 70}" width="20" height="12" rx="3" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><ellipse cx="${xs[i]}" cy="${ys[i]}" rx="48" ry="52" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="3.5"/>` + tx(xs[i], ys[i], it, 12, 10) + `</g>`).join('');
+    return tx(200, 30, t, 15, 26) + cuerpos + `<path d="M0,240 Q100,224 200,240 T400,240 V280 H0Z" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>`;
+  },
+  libro(t, items) {
+    const viñetas = items.slice(0, 4).map((it, i) => `<circle cx="226" cy="${94 + i * 36}" r="4" fill="#ff9ec6"/>` + tx(288, 94 + i * 36, it, 11, 16)).join('');
+    return `<rect x="34" y="50" width="158" height="170" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/><rect x="208" y="50" width="158" height="170" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/><line x1="200" y1="50" x2="200" y2="220" stroke="${INK}" stroke-width="3"/>` +
+      tx(113, 120, t, 15, 12) + viñetas + `<rect x="24" y="222" width="352" height="14" rx="7" fill="#ffc6de" stroke="${INK}" stroke-width="3"/>`;
+  },
+  cohete(t, items) {
+    const pilas = items.slice(0, 3).map((it, i) => pill(252, 96 + i * 42, 128, 30, it, PAL[(i + 2) % PAL.length], 11)).join('');
+    return `<g class="flota"><path d="M200,58 Q226,96 226,140 L226,176 L174,176 L174,140 Q174,96 200,58Z" fill="#ffffff" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M174,150 L154,176 L174,176Z M226,150 L246,176 L226,176Z" fill="#ffc6de" stroke="${INK}" stroke-width="3"/><circle cx="200" cy="120" r="13" fill="#cfe8ff" stroke="${INK}" stroke-width="3"/><path d="M186,180 Q200,246 214,180Z" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/></g>` +
+      estrella(60, 60, 12, 'pulso') + estrella(340, 52, 10, 'pulso') + estrella(60, 200, 9, 'pulso') + pilas + tx(90, 240, t, 13, 14);
+  },
+  laptop(t, items) {
+    const lineas = items.slice(0, 3).map((it, i) => `<circle cx="112" cy="${118 + i * 26}" r="6" fill="#d9f5e7" stroke="${INK}" stroke-width="2"/>` + tx(214, 118 + i * 26, it, 12, 22)).join('');
+    return `<rect x="72" y="36" width="256" height="160" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="4"/><rect x="86" y="50" width="228" height="132" rx="6" fill="#ffe0ef"/>` + tx(200, 78, t, 14, 24) + lineas +
+      `<path d="M46,200 L354,200 L372,226 L28,226Z" fill="#d7b9f5" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><line x1="130" y1="212" x2="270" y2="212" stroke="${INK}" stroke-width="2" stroke-dasharray="4 4"/>`;
+  },
+  estrellas(t, items) {
+    const pos = [[80, 110], [200, 84], [320, 130], [200, 196]];
+    const lineas = pos.slice(1).map((p, i) => `<line x1="${pos[i][0]}" y1="${pos[i][1]}" x2="${p[0]}" y2="${p[1]}" stroke="${INK}" stroke-width="2.5" stroke-dasharray="6 6"/>`).join('');
+    const nodos = items.slice(0, 4).map((it, i) => estrella(pos[i][0], pos[i][1], 20, 'pulso') + tx(pos[i][0], pos[i][1] + 40, it, 11, 14)).join('');
+    return tx(200, 28, t, 15, 24) + lineas + nodos;
+  }
+};
+const NR_ORDEN = ['escenario', 'lupa', 'camino', 'globos', 'libro', 'cohete', 'laptop', 'estrellas'];
+function dinamico(t) {
+  const idx = TEMAS.indexOf(t), nombre = NR_ORDEN[idx % NR_ORDEN.length];
+  const items = (AMP[t.id] ? AMP[t.id][1] : (t.c || []).map(c => c[0])).map(corto);
+  return frame(UNIDADES[t.u].c, NR[nombre](t.t, items));
+}
+
+/* ---------- dibujos estilo sticker (inspirados en las referencias) ---------- */
+const KI = {
+  heart: () => `<path d="M0,12 C-22,-4 -16,-18 0,-8 C16,-18 22,-4 0,12Z" fill="#ffc6de" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  star: () => estrella(0, 0, 18, ''),
+  sparkle: () => `<path d="M0,-18 Q3,-3 18,0 Q3,3 0,18 Q-3,3 -18,0 Q-3,-3 0,-18Z" fill="#ffffff" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  cloud: () => `<path d="M-18,8 Q-26,8 -22,0 Q-20,-10 -8,-6 Q-4,-18 8,-12 Q18,-16 20,-4 Q28,0 22,8Z" fill="#ffffff" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  bow: () => `<path d="M0,0 L-18,-11 L-18,11Z M0,0 L18,-11 L18,11Z" fill="#ffc6de" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="0" cy="0" r="4" fill="#d7b9f5" stroke="${INK}" stroke-width="2"/>`,
+  book: () => `<path d="M-20,-10 Q-8,-14 0,-6 Q8,-14 20,-10 L20,12 Q8,8 0,14 Q-8,8 -20,12Z" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><line x1="0" y1="-6" x2="0" y2="14" stroke="${INK}" stroke-width="2"/>`,
+  envelope: () => `<rect x="-20" y="-13" width="40" height="26" rx="5" fill="#cfe8ff" stroke="${INK}" stroke-width="2.5"/><path d="M-20,-13 L0,2 L20,-13" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  mug: () => `<path d="M-14,-10 L14,-10 L14,10 Q14,16 6,16 L-6,16 Q-14,16 -14,10Z" fill="#ffd9b8" stroke="${INK}" stroke-width="2.5"/><path d="M14,-4 Q24,-4 24,4 Q24,10 14,10" fill="none" stroke="${INK}" stroke-width="2.5"/><path d="M-6,-16 Q-3,-20 0,-16 M4,-16 Q7,-20 10,-16" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>`,
+  bulb: () => `<circle cx="0" cy="-4" r="14" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/><rect x="-6" y="10" width="12" height="8" rx="3" fill="#ffc6de" stroke="${INK}" stroke-width="2"/>`,
+  speech: () => `<path d="M-20,-12 Q-20,-16 -16,-16 L16,-16 Q20,-16 20,-12 L20,6 Q20,10 16,10 L-4,10 L-10,17 L-8,10 L-16,10 Q-20,10 -20,6Z" fill="#ffffff" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="-8" cy="-3" r="2.2" fill="${INK}"/><circle cx="0" cy="-3" r="2.2" fill="${INK}"/><circle cx="8" cy="-3" r="2.2" fill="${INK}"/>`,
+  pencil: () => `<g transform="rotate(-35)"><rect x="-4" y="-20" width="8" height="30" rx="2" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/><path d="M-4,10 L0,20 L4,10Z" fill="#ffd9b8" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><rect x="-4" y="-24" width="8" height="5" rx="1" fill="#ffc6de" stroke="${INK}" stroke-width="2"/></g>`,
+  camera: () => `<rect x="-20" y="-11" width="40" height="26" rx="7" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><circle cx="0" cy="2" r="8" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><rect x="-8" y="-16" width="10" height="6" rx="2" fill="#ffc6de" stroke="${INK}" stroke-width="2"/>`,
+  bear: () => `<circle cx="-14" cy="-14" r="6" fill="#ffd9b8" stroke="${INK}" stroke-width="2.5"/><circle cx="14" cy="-14" r="6" fill="#ffd9b8" stroke="${INK}" stroke-width="2.5"/><circle cx="0" cy="0" r="18" fill="#ffd9b8" stroke="${INK}" stroke-width="2.5"/><circle cx="-7" cy="-3" r="2" fill="${INK}"/><circle cx="7" cy="-3" r="2" fill="${INK}"/><ellipse cx="0" cy="6" rx="4" ry="3" fill="${INK}"/><circle cx="-11" cy="4" r="3" fill="#ffc6de"/><circle cx="11" cy="4" r="3" fill="#ffc6de"/>`,
+  bunny: () => `<ellipse cx="-7" cy="-20" rx="5" ry="14" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><ellipse cx="7" cy="-20" rx="5" ry="14" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><circle cx="0" cy="2" r="16" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><circle cx="-6" cy="0" r="2" fill="${INK}"/><circle cx="6" cy="0" r="2" fill="${INK}"/><ellipse cx="0" cy="6" rx="2" ry="1.5" fill="#ffc6de"/>`,
+  cherry: () => `<path d="M-8,0 Q0,-20 8,2" fill="none" stroke="${INK}" stroke-width="2"/><circle cx="-8" cy="8" r="8" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><circle cx="8" cy="10" r="8" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>`,
+  moon: () => `<path d="M4,-18 A18,18 0 1,0 18,6 A14,14 0 1,1 4,-18Z" fill="#fff3b8" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  sun: () => `<g stroke="#ffd166" stroke-width="4" stroke-linecap="round">` + [0,45,90,135,180,225,270,315].map(a => `<line x1="${(22*Math.cos(a*Math.PI/180)).toFixed(1)}" y1="${(22*Math.sin(a*Math.PI/180)).toFixed(1)}" x2="${(28*Math.cos(a*Math.PI/180)).toFixed(1)}" y2="${(28*Math.sin(a*Math.PI/180)).toFixed(1)}"/>`).join('') + `</g><circle cx="0" cy="0" r="15" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/><circle cx="-5" cy="-3" r="2" fill="${INK}"/><circle cx="5" cy="-3" r="2" fill="${INK}"/><path d="M-5,4 Q0,8 5,4" fill="none" stroke="${INK}" stroke-width="2"/>`,
+  phone: () => `<rect x="-12" y="-20" width="24" height="40" rx="6" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><rect x="-8" y="-14" width="16" height="24" rx="2" fill="#cfe8ff"/><circle cx="0" cy="15" r="2" fill="${INK}"/>`,
+  laptop: () => `<rect x="-20" y="-14" width="40" height="26" rx="4" fill="#cfe8ff" stroke="${INK}" stroke-width="2.5"/><path d="M-26,14 L26,14 L22,19 L-22,19Z" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/>`,
+  lupa: () => `<circle cx="-3" cy="-3" r="13" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/><line x1="7" y1="7" x2="18" y2="18" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`,
+  check: () => `<circle cx="0" cy="0" r="16" fill="#d9f5e7" stroke="${INK}" stroke-width="2.5"/><path d="M-8,0 L-3,6 L8,-6" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+  rainbow: () => `<path d="M-22,12 A22,22 0 0,1 22,12" fill="none" stroke="#ffc6de" stroke-width="7" stroke-linecap="round"/><path d="M-14,12 A14,14 0 0,1 14,12" fill="none" stroke="#fff3b8" stroke-width="6" stroke-linecap="round"/><path d="M-7,12 A7,7 0 0,1 7,12" fill="none" stroke="#cfe8ff" stroke-width="5" stroke-linecap="round"/>`,
+  flower: () => [0,72,144,216,288].map(a => `<circle cx="${(10*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(10*Math.sin(a*Math.PI/180)).toFixed(1)}" r="9" fill="#ffc6de" stroke="${INK}" stroke-width="2"/>`).join('') + `<circle cx="0" cy="0" r="6" fill="#fff3b8" stroke="${INK}" stroke-width="2"/>`,
+  mic: () => `<rect x="-7" y="-22" width="14" height="24" rx="7" fill="#ff9ec6" stroke="${INK}" stroke-width="2.5"/><path d="M-15,-2 Q-15,14 0,14 Q15,14 15,-2" fill="none" stroke="${INK}" stroke-width="2.5"/><line x1="0" y1="14" x2="0" y2="22" stroke="${INK}" stroke-width="2.5"/><line x1="-9" y1="22" x2="9" y2="22" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`,
+  headphones: () => `<path d="M-18,6 A18,18 0 0,1 18,6" fill="none" stroke="${INK}" stroke-width="3"/><rect x="-22" y="4" width="9" height="14" rx="4" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><rect x="13" y="4" width="9" height="14" rx="4" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>`,
+  note: () => `<rect x="-14" y="-18" width="28" height="36" rx="4" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><line x1="-8" y1="-8" x2="8" y2="-8" stroke="#ffc6de" stroke-width="3" stroke-linecap="round"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#ffc6de" stroke-width="3" stroke-linecap="round"/><line x1="-8" y1="8" x2="4" y2="8" stroke="#ffc6de" stroke-width="3" stroke-linecap="round"/>`,
+  butterfly: () => `<ellipse cx="-10" cy="-6" rx="10" ry="8" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><ellipse cx="10" cy="-6" rx="10" ry="8" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><ellipse cx="-8" cy="8" rx="7" ry="6" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><ellipse cx="8" cy="8" rx="7" ry="6" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><line x1="0" y1="-10" x2="0" y2="12" stroke="${INK}" stroke-width="2.5"/>`
+};
+const SIL = {"comunicacion": ["envelope", "speech", "phone", "heart", "cloud", "mic", "star", "bow"], "expresion": ["pencil", "mic", "heart", "sparkle", "flower", "butterfly", "bow", "star"], "lenguaje": ["speech", "book", "bulb", "heart", "star", "cloud", "note", "bow"], "funciones": ["speech", "sparkle", "heart", "mic", "star", "bulb", "cloud", "bow"], "verbal": ["speech", "book", "note", "pencil", "mic", "cloud", "heart", "star"], "noverbal-lenguaje": ["heart", "sparkle", "sun", "bunny", "bow", "flower", "star", "cloud"], "registros": ["book", "bow", "mug", "envelope", "bear", "star", "cloud", "note"], "redaccion": ["pencil", "note", "book", "bulb", "check", "star", "heart", "bow"], "resumen": ["book", "bulb", "check", "note", "sparkle", "star", "cloud", "pencil"], "sintesis": ["book", "bulb", "note", "star", "heart", "cloud", "sparkle", "check"], "parafrasis": ["speech", "bulb", "pencil", "book", "sparkle", "heart", "star", "cloud"], "argumento": ["bulb", "check", "speech", "lupa", "star", "book", "heart", "cloud"], "descripcion": ["camera", "lupa", "flower", "sparkle", "cloud", "heart", "star", "butterfly"], "ensayo": ["book", "note", "pencil", "bulb", "check", "star", "bow", "cloud"], "estructura-ensayo": ["book", "note", "bulb", "check", "star", "heart", "cloud", "bow"], "caracteristicas-ensayo": ["sparkle", "heart", "cloud", "star", "bow", "mug", "book", "bulb"], "noverbal": ["bear", "cherry", "moon", "mug", "star", "cloud", "heart", "butterfly"], "contacto": ["sun", "sparkle", "heart", "star", "bunny", "bear", "cloud", "flower"], "posturas": ["bear", "bunny", "sun", "heart", "star", "cloud", "sparkle", "bow"], "gestos": ["heart", "sparkle", "star", "bow", "cloud", "flower", "sun", "bunny"], "facial": ["sun", "moon", "cloud", "star", "heart", "sparkle", "rainbow", "cherry"], "factual": ["lupa", "check", "book", "bulb", "note", "star", "heart", "cloud"], "paralinguistica": ["mic", "headphones", "note", "star", "heart", "cloud", "sparkle", "bow"], "funciones-voz": ["mic", "speech", "sparkle", "heart", "star", "cloud", "bow", "bulb"], "caracteristicas-voz": ["mic", "headphones", "note", "star", "heart", "cloud", "sparkle", "bulb"], "articulacion": ["mic", "speech", "sparkle", "bulb", "star", "heart", "cloud", "bow"], "nivel": ["lupa", "bulb", "check", "star", "book", "cloud", "heart", "sparkle"], "cobertura": ["rainbow", "cloud", "sun", "star", "flower", "heart", "sparkle", "moon"], "fuentes": ["book", "lupa", "note", "camera", "bulb", "star", "heart", "cloud"], "estrategia": ["lupa", "check", "pencil", "bulb", "star", "heart", "cloud", "sparkle"], "academico": ["book", "lupa", "bulb", "star", "heart", "note", "sparkle", "cloud"], "latindex": ["book", "rainbow", "star", "cloud", "sparkle", "heart", "flower", "bulb"], "scielo": ["book", "flower", "heart", "sun", "star", "cloud", "sparkle", "bow"], "scopus": ["laptop", "lupa", "bulb", "star", "check", "heart", "sparkle", "cloud"], "operadores": ["laptop", "lupa", "check", "bulb", "star", "sparkle", "heart", "cloud"], "procesadores": ["laptop", "pencil", "note", "book", "check", "star", "heart", "cloud"], "aplicaciones-procesadores": ["laptop", "note", "book", "pencil", "check", "star", "sparkle", "bow"], "atajos-word": ["laptop", "check", "sparkle", "bulb", "star", "heart", "cloud", "bow"], "atajos-excel": ["laptop", "check", "sparkle", "camera", "star", "heart", "cloud", "bulb"], "presentaciones": ["laptop", "camera", "bulb", "sparkle", "star", "heart", "cloud", "pencil"], "powerpoint": ["note", "star", "heart", "cloud", "sparkle", "bow", "mug", "phone"], "prezi": ["laptop", "sparkle", "butterfly", "rainbow", "star", "heart", "cloud", "bulb"], "canva": ["pencil", "flower", "butterfly", "sparkle", "heart", "star", "bow", "cloud"], "colaborativo": ["phone", "laptop", "speech", "heart", "star", "cloud", "sparkle", "bow"], "copilot": ["sparkle", "laptop", "check", "star", "heart", "cloud", "bulb", "bow"], "gemini": ["speech", "sparkle", "bulb", "star", "cloud", "heart", "moon", "rainbow"], "ia-responsable": ["check", "bulb", "sparkle", "heart", "star", "cloud", "book", "bow"]};
+function hoja(t, variante) {
+  const un = UNIDADES[t.u];
+  const nombres = SIL[t.id] || ['star', 'heart', 'cloud', 'sparkle', 'star', 'heart', 'cloud', 'sparkle'];
+  const pos = [[62, 60], [172, 44], [282, 66], [362, 56], [92, 150], [204, 136], [312, 156], [368, 206]];
+  let seed = 0; for (const ch of t.id) seed = (seed * 31 + ch.charCodeAt(0)) % 9973;
+  const r = k => ((seed * (k + 3) * 9301 + 49297) % 233280) / 233280;
+  const iconos = pos.map((p, i) => {
+    const rot = (r(i) * 24 - 12).toFixed(1), sc = (0.95 + r(i + 9) * 0.35).toFixed(2);
+    const nombre = nombres[(i + (variante === 'B' ? 3 : 0)) % nombres.length];
+    return `<g filter="url(#stk)" transform="translate(${p[0]},${p[1]}) rotate(${rot}) scale(${sc})">${(KI[nombre] || KI.star)()}</g>`;
+  }).join('');
+  const etiquetas = variante === 'B'
+    ? (t.c || []).map(c => c[0]).slice(0, 3).map((x, i) => pill(16 + i * 128, 230, 120, 32, x, PAL[(i + 2) % PAL.length], 11)).join('')
+    : (AMP[t.id] ? AMP[t.id][1].map(corto) : []).slice(0, 4).map((x, i) => pill(12 + i * 98, 230, 92, 32, x, PAL[i % PAL.length], 10)).join('');
+  return `<svg viewBox="0 0 400 280" style="width:100%;height:auto" role="img" aria-label="Dibujo del tema ${t.t}">
+    <defs><filter id="stk" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feFlood flood-color="#ffffff"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <rect width="400" height="280" rx="18" fill="#fff8fd"/>
+    <circle cx="0" cy="0" r="90" fill="${un.c}" opacity=".55"/><circle cx="400" cy="280" r="100" fill="${un.c}" opacity=".45"/>
+    <rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="2 8"/>
+    ${iconos}${etiquetas}
+  </svg>`;
+}
+/* ---------- escenas kawaii específicas por tema ---------- */
+function P(x, y, s, body, expr, arms) {
+  const brazo = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>`;
+  let brazos = '';
+  if (arms === 'R' || arms === 'both') brazos += brazo(16, 14, 34, -8);
+  if (arms === 'L' || arms === 'both') brazos += brazo(-16, 14, -34, -8);
+  if (arms === 'down') brazos += brazo(-16, 16, -26, 34) + brazo(16, 16, 26, 34);
+  if (arms === 'cross') brazos += brazo(-16, 18, 14, 22) + brazo(16, 18, -14, 22);
+  const boca = expr === 'open' ? `<ellipse cx="0" cy="-12" rx="4" ry="4.5" fill="${INK}"/>`
+    : expr === 'sad' ? `<path d="M-6,-10 Q0,-16 6,-10" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`
+    : expr === 'flat' ? `<line x1="-5" y1="-12" x2="5" y2="-12" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`
+    : `<path d="M-6,-14 Q0,-8 6,-14" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`;
+  return `<g class="flota" transform="translate(${x},${y}) scale(${s || 1})">${brazos}<rect x="-18" y="2" width="36" height="34" rx="14" fill="${body}" stroke="${INK}" stroke-width="2.5"/><circle cx="0" cy="-22" r="23" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><circle cx="-8" cy="-24" r="2.6" fill="${INK}"/><circle cx="8" cy="-24" r="2.6" fill="${INK}"/><circle cx="-14" cy="-16" r="4" fill="#ffc6de"/><circle cx="14" cy="-16" r="4" fill="#ffc6de"/>${boca}</g>`;
+}
+function ic(n, x, y, s, r) { return `<g filter="url(#stk)" transform="translate(${x},${y}) rotate(${r || 0}) scale(${s || 1})">${(KI[n] || KI.star)()}</g>`; }
+function brillo(x, y, s) { return ic('sparkle', x, y, s || 0.7, 0); }
+function caja(x, y, w, h, txt, col) { return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="${col || '#ffffff'}" stroke="${INK}" stroke-width="2.5"/>` + tx(x + w / 2, y + h / 2, txt, 12, 16); }
+const ESC = {
+  comunicacion: () => P(84, 170, 1, '#ffc6de', 'smile', 'R') + P(316, 170, 1, '#d9f5e7', 'open', 'L') +
+    `<path d="M140,130 Q200,100 260,130" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="6 6"/>` + ic('envelope', 200, 118, 1.2, -6) + ic('cloud', 200, 196, 0.8) +
+    burbuja(40, 40, 100, 40, '¿Y el mensaje?', '#ffffff') + tx(84, 236, 'Emisor', 13, 12) + tx(316, 236, 'Receptor', 13, 12) + brillo(360, 50),
+  expresion: () => ic('bulb', 60, 60, 0.9) + `<rect x="130" y="50" width="150" height="110" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/><rect x="142" y="62" width="126" height="86" rx="6" fill="#cfe8ff"/>` + ic('heart', 180, 96, 1.2) + ic('star', 230, 120, 0.9) +
+    `<line x1="205" y1="160" x2="205" y2="230" stroke="${INK}" stroke-width="4"/>` + P(300, 176, 1, '#d7b9f5', 'smile', 'R') + ic('pencil', 262, 178, 1.2, 20) + brillo(350, 60) + tx(205, 252, 'Expresarse', 13, 14),
+  lenguaje: () => burbuja(24, 34, 120, 42, 'Hola', '#ffffff') + P(96, 178, 1, '#ffc6de', 'smile', 'R') + P(304, 178, 1, '#cfe8ff', 'open', 'L') + burbuja(232, 34, 130, 42, '¡Entendido!', '#ffffff') + ic('book', 200, 124, 1.1) + ic('sparkle', 200, 210, 0.8) + tx(96, 240, 'Palabras', 12, 12) + tx(304, 240, 'Gestos', 12, 12),
+  funciones: () => ic('speech', 200, 120, 1.4) + [0, 60, 120, 180, 240, 300].map((a, i) => { const x = 200 + 116 * Math.cos((a - 90) * Math.PI / 180), y = 150 + 98 * Math.sin((a - 90) * Math.PI / 180); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="2.5"/>`; }).join('') + tx(200, 150, 'Jakobson', 12, 9),
+  verbal: () => ic('book', 96, 150, 1.6) + P(300, 170, 1, '#d7b9f5', 'open', 'R') + burbuja(230, 66, 120, 42, '¡Dime!', '#ffffff') + ic('note', 96, 228, 0.8, -8) + ic('pencil', 130, 232, 0.8, 30) + tx(96, 252, 'Escrito', 12, 12) + tx(300, 240, 'Oral', 12, 12),
+  'noverbal-lenguaje': () => P(92, 172, 1, '#ffc6de', 'smile', 'R') + P(308, 172, 1, '#d9f5e7', 'flat', 'L') + `<line x1="150" y1="200" x2="250" y2="200" stroke="${INK}" stroke-width="2.5" stroke-dasharray="4 6"/>` + tx(200, 196, 'distancia', 11, 12) + ic('mug', 200, 120, 0.9) + brillo(200, 70) + tx(92, 240, 'Mirada', 12, 12) + tx(308, 240, 'Postura', 12, 12),
+  registros: () => P(90, 172, 1, '#d7b9f5', 'flat', 'down') + P(310, 172, 1, '#ffc6de', 'smile', 'R') + burbuja(20, 40, 150, 42, 'Usted', '#ffffff') + burbuja(230, 40, 150, 42, 'Tú, ¿qué tal?', '#ffffff') + tx(90, 240, 'Formal', 12, 12) + tx(310, 240, 'Informal', 12, 12),
+  redaccion: () => `<rect x="110" y="40" width="180" height="150" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + [0, 1, 2, 3].map(i => `<rect x="130" y="${70 + i * 24}" width="${[130, 110, 140, 90][i]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + ic('pencil', 250, 170, 1.2, -30) + P(56, 200, 0.9, '#d9f5e7', 'smile', 'R') + ic('bulb', 340, 70, 0.9) + ic('check', 340, 150, 0.9) + tx(200, 240, 'Planear · Escribir · Revisar', 12, 30),
+  resumen: () => `<rect x="30" y="50" width="130" height="150" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + [0, 1, 2, 3, 4].map(i => `<rect x="44" y="${70 + i * 22}" width="100" height="5" rx="2.5" fill="#d7b9f5"/>`).join('') + `<path d="M170,125 L220,125" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M214,116 L228,125 L214,134Z" fill="${INK}"/>` + `<rect x="236" y="100" width="110" height="60" rx="10" fill="#fff3b8" stroke="${INK}" stroke-width="3"/>` + tx(291, 130, 'ideas clave', 12, 12) + P(300, 210, 0.8, '#ffc6de', 'smile', 'L') + ic('lupa', 120, 230, 0.8),
+  sintesis: () => [0, 1, 2].map(i => `<rect x="${30 + i * 0}" y="${50 + i * 60}" width="80" height="44" rx="8" fill="${PAL[i]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + `<path d="M120,72 Q180,80 210,140" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="6 5"/><path d="M120,132 L210,140" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="6 5"/><path d="M120,192 Q180,180 210,140" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="6 5"/>` + `<rect x="210" y="64" width="150" height="150" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + [0, 1, 2, 3].map(i => `<rect x="226" y="${86 + i * 22}" width="118" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + ic('heart', 290, 226, 0.8),
+  parafrasis: () => ic('bulb', 200, 60, 1.4) + `<rect x="30" y="120" width="150" height="110" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + tx(105, 170, 'Texto difícil', 12, 12) + `<line x1="40" y1="200" x2="170" y2="200" stroke="${INK}" stroke-width="3"/>` + `<rect x="220" y="120" width="150" height="110" rx="10" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>` + tx(295, 165, 'Con mis palabras', 12, 12) + ic('check', 350, 210, 0.9) + P(200, 210, 0.7, '#ffc6de', 'smile', 'both') ,
+  argumento: () => `<rect x="150" y="30" width="6" height="110" fill="${INK}"/><path d="M156,32 L220,50 L156,68Z" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>` + caja(70, 160, 120, 34, 'Pruebas', '#d7b9f5') + caja(210, 160, 120, 34, 'Razones', '#cfe8ff') + P(200, 118, 0.9, '#d9f5e7', 'smile', 'both') + ic('check', 320, 80, 0.9) + tx(200, 226, 'Tesis + premisas = conclusión', 12, 34),
+  descripcion: () => P(110, 170, 1, '#ffc6de', 'smile', 'L') + ic('lupa', 230, 120, 1.4) + ic('flower', 290, 180, 1.2) + ic('camera', 270, 60, 0.9) + tx(110, 240, 'Objetiva', 12, 12) + tx(290, 240, 'Hechos y forma', 12, 14),
+  ensayo: () => `<rect x="60" y="34" width="280" height="200" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + caja(80, 50, 240, 36, 'Introducción', '#ffc6de') + caja(80, 96, 240, 60, 'Desarrollo', '#d7b9f5') + caja(80, 166, 240, 36, 'Conclusión', '#d9f5e7') + P(330, 200, 0.7, '#cfe8ff', 'smile', 'R') + ic('pencil', 350, 130, 0.8, 20),
+  'estructura-ensayo': () => caja(90, 40, 220, 42, 'Introducción', '#ffc6de') + caja(110, 96, 180, 58, 'Argumentos', '#d7b9f5') + caja(90, 168, 220, 42, 'Conclusión', '#d9f5e7') + P(330, 180, 0.9, '#fff3b8', 'smile', 'R') + burbuja(20, 230, 120, 36, 'Cierra la idea', '#ffffff') + ic('bow', 60, 110, 0.9),
+  'caracteristicas-ensayo': () => P(200, 180, 1.1, '#cfe8ff', 'smile', 'both') + `<ellipse cx="200" cy="70" rx="110" ry="46" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/>` + ic('note', 150, 68, 0.9) + ic('heart', 200, 68, 0.9) + ic('mug', 252, 70, 0.8) + ic('sparkle', 340, 230, 0.8) + tx(200, 252, 'breve · subjetivo · cuidado', 12, 30),
+  noverbal: () => P(100, 172, 1, '#ffc6de', 'flat', 'cross') + P(300, 172, 1, '#d9f5e7', 'smile', 'both') + ic('cloud', 200, 90, 1.1) + ic('sparkle', 200, 150, 0.8) + tx(100, 240, 'cerrado', 12, 12) + tx(300, 240, 'abierto', 12, 12),
+  contacto: () => P(100, 172, 1, '#d7b9f5', 'smile', 'none') + P(300, 172, 1, '#cfe8ff', 'open', 'none') + `<path d="M140,130 L260,130" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 6"/>` + ic('heart', 200, 110, 1.3) + ic('eye', 200, 150, 0.9) + tx(200, 240, 'Mirada que conecta', 12, 22),
+  posturas: () => P(70, 170, 1, '#ffc6de', 'smile', 'both') + P(200, 170, 1, '#d7b9f5', 'flat', 'cross') + P(330, 170, 1, '#d9f5e7', 'smile', 'down') + tx(70, 240, 'Abierta', 11, 10) + tx(200, 240, 'Cerrada', 11, 10) + tx(330, 240, 'Firme', 11, 10) + brillo(200, 80, 0.8),
+  gestos: () => P(120, 170, 1, '#ffc6de', 'open', 'R') + burbuja(200, 50, 140, 40, '¡Muy alto!', '#ffffff') + ic('star', 300, 150, 1.2) + ic('sparkle', 320, 100, 0.8) + tx(120, 240, 'Gesto', 12, 12) + ic('check', 230, 200, 0.9),
+  facial: () => [0, 1, 2, 3].map(i => { const x = 70 + i * 86; const expr = ['smile', 'sad', 'open', 'flat'][i]; return `<g transform="translate(${x},120)"><circle r="30" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><circle cx="-10" cy="-6" r="3" fill="${INK}"/><circle cx="10" cy="-6" r="3" fill="${INK}"/>` + (expr === 'smile' ? `<path d="M-12,8 Q0,18 12,8" fill="none" stroke="${INK}" stroke-width="2.5"/>` : expr === 'sad' ? `<path d="M-12,16 Q0,6 12,16" fill="none" stroke="${INK}" stroke-width="2.5"/>` : expr === 'open' ? `<circle cx="0" cy="12" r="5" fill="${INK}"/>` : `<line x1="-8" y1="12" x2="8" y2="12" stroke="${INK}" stroke-width="2.5"/>`) + `</g>` + tx(x, 178, ['Alegría', 'Tristeza', 'Sorpresa', 'Calma'][i], 11, 10); }).join('') + ic('heart', 200, 230, 0.9),
+  factual: () => ic('lupa', 110, 120, 1.4) + ic('check', 230, 100, 1.2) + ic('warn', 300, 100, 1) + ic('book', 260, 190, 1.1) + P(90, 190, 0.9, '#d9f5e7', 'smile', 'R') + tx(230, 150, 'Dato real', 12, 12) + tx(330, 150, 'Mito', 12, 8),
+  paralinguistica: () => P(110, 170, 1, '#ffc6de', 'open', 'R') + `<path d="M170,150 Q190,130 170,110 M182,160 Q210,130 182,100 M194,170 Q230,130 194,90" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>` + ic('note', 300, 110, 1) + ic('headphones', 320, 190, 0.9) + tx(110, 240, 'tono · ritmo', 12, 22),
+  'funciones-voz': () => ic('mic', 200, 80, 1.3) + P(120, 190, 0.8, '#d7b9f5', 'smile', 'none') + P(200, 196, 0.8, '#ffc6de', 'smile', 'none') + P(280, 190, 0.8, '#d9f5e7', 'smile', 'none') + burbuja(230, 20, 140, 36, '¡Claro!', '#ffffff') + ic('heart', 60, 80, 0.9),
+  'caracteristicas-voz': () => P(200, 180, 1, '#cfe8ff', 'open', 'R') + `<path d="M60,130 Q90,90 120,130 Q150,170 180,130" fill="none" stroke="${INK}" stroke-width="3"/><path d="M60,170 Q90,150 120,170 Q150,190 180,170" fill="none" stroke="${INK}" stroke-width="6"/>` + ic('headphones', 330, 70, 1) + ic('bulb', 330, 180, 0.9) + tx(200, 240, 'timbre · intensidad', 12, 26),
+  articulacion: () => P(150, 172, 1.1, '#ffc6de', 'open', 'none') + ic('speech', 280, 80, 1.2) + tx(280, 80, 'A E I O U', 11, 14) + ic('mic', 330, 190, 0.9) + brillo(60, 70) + tx(150, 246, 'pronunciar bien', 12, 20),
+  nivel: () => `<path d="M40,240 L120,200 L200,160 L280,120 L360,80" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>` + P(120, 186, 0.8, '#d7b9f5', 'smile', 'R') + ic('lupa', 300, 60, 1.2) + ic('star', 210, 110, 0.9) + tx(60, 236, 'general', 11, 10) + tx(330, 110, 'detalle', 11, 10),
+  cobertura: () => `<circle cx="200" cy="140" r="90" fill="#cfe8ff" stroke="${INK}" stroke-width="3"/><ellipse cx="200" cy="140" rx="40" ry="90" fill="none" stroke="${INK}" stroke-width="2"/><line x1="110" y1="140" x2="290" y2="140" stroke="${INK}" stroke-width="2"/>` + ic('cloud', 150, 110, 0.8) + ic('sun', 260, 200, 0.6) + P(330, 200, 0.7, '#ffc6de', 'smile', 'R') + tx(200, 252, 'periodo · región · idioma', 12, 30),
+  fuentes: () => ic('book', 90, 120, 1.3) + ic('note', 200, 120, 1.3) + ic('globe', 300, 120, 1) + caja(40, 190, 100, 30, 'Primarias', '#ffc6de') + caja(150, 190, 100, 30, 'Secundarias', '#d7b9f5') + caja(260, 190, 100, 30, 'Terciarias', '#cfe8ff') + brillo(360, 50),
+  estrategia: () => [[200, 60], [110, 130], [290, 130], [200, 200], [120, 210]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="18" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/>`).join('') + `<path d="M200,60 L110,130 M200,60 L290,130 M200,200 L110,130 M200,200 L290,130 M120,210 L200,200" stroke="${INK}" stroke-width="2" stroke-dasharray="5 4"/>` + tx(200, 60, 'AND', 10, 6) + tx(110, 130, 'clave', 10, 6) + tx(290, 130, 'OR', 10, 4) + ic('lupa', 320, 220, 1.1),
+  academico: () => [0, 1, 2, 3].map(i => `<rect x="${40 + i * 0}" y="${40 + i * 0}" width="0" height="0"/>`).join('') + [0, 1, 2].map(i => `<rect x="${30 + i * 60}" y="36" width="44" height="100" rx="4" fill="${PAL[i]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + P(300, 180, 0.95, '#d9f5e7', 'smile', 'R') + ic('lupa', 160, 180, 1) + ic('star', 350, 60, 0.8) + tx(160, 240, 'artículos', 12, 16),
+  latindex: () => `<path d="M100,60 Q140,40 180,70 Q210,110 180,150 Q140,200 110,160 Q80,120 100,60Z" fill="#d9f5e7" stroke="${INK}" stroke-width="2.5"/><path d="M230,80 Q280,60 320,100 Q330,160 290,190 Q250,180 230,130Z" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/>` + [[120, 200], [250, 220], [330, 40]].map((p, i) => `<line x1="${p[0]}" y1="${p[1]}" x2="${p[0]}" y2="${p[1] - 30}" stroke="${INK}" stroke-width="2.5"/><path d="M${p[0]},${p[1] - 30} L${p[0] + 20},${p[1] - 24} L${p[0]},${p[1] - 18}Z" fill="${PAL[i + 1]}" stroke="${INK}" stroke-width="2"/>`).join('') + P(330, 210, 0.7, '#ffc6de', 'smile', 'R') + tx(200, 250, 'América Latina · Caribe · España', 11, 30),
+  scielo: () => `<path d="M200,90 Q140,70 60,90 L60,200 Q140,180 200,200 Z" fill="#ffffff" stroke="${INK}" stroke-width="3"/><path d="M200,90 Q260,70 340,90 L340,200 Q260,180 200,200 Z" fill="#d9f5e7" stroke="${INK}" stroke-width="3"/>` + ic('flower', 330, 60, 0.9) + ic('sun', 60, 60, 0.7) + ic('heart', 200, 230, 0.9) + P(200, 130, 0.5, '#ffc6de', 'smile', 'none') + tx(200, 252, 'acceso abierto', 12, 20),
+  scopus: () => [0, 1, 2].map(i => `<rect x="${40 + i * 10}" y="${180 - i * 10}" width="130" height="16" rx="6" fill="${PAL[i]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + `<rect x="230" y="50" width="140" height="120" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3"/><rect x="246" y="130" width="18" height="30" fill="#d7b9f5"/><rect x="274" y="110" width="18" height="50" fill="#ffc6de"/><rect x="302" y="90" width="18" height="70" fill="#d9f5e7"/>` + ic('lupa', 200, 100, 1) + P(360, 220, 0.6, '#cfe8ff', 'smile', 'R') + tx(300, 190, 'métricas', 11, 12),
+  operadores: () => `<circle cx="150" cy="130" r="70" fill="#ffc6de" fill-opacity=".6" stroke="${INK}" stroke-width="3"/><circle cx="250" cy="130" r="70" fill="#cfe8ff" fill-opacity=".6" stroke="${INK}" stroke-width="3"/>` + tx(110, 130, 'Término 1', 12, 8) + tx(290, 130, 'Término 2', 12, 8) + tx(200, 130, 'AND', 13, 6) + tx(200, 214, 'OR amplía · NOT excluye', 11, 24) + ic('sparkle', 340, 60, 0.9),
+  procesadores: () => `<rect x="80" y="140" width="240" height="90" rx="12" fill="#cfe8ff" stroke="${INK}" stroke-width="3"/><rect x="100" y="150" width="200" height="60" rx="6" fill="#ffffff"/>` + [0, 1, 2].map(i => `<rect x="112" y="${162 + i * 14}" width="${[150, 110, 130][i]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + P(330, 180, 0.9, '#d7b9f5', 'smile', 'both') + ic('pencil', 60, 80, 0.9, 20) + ic('check', 340, 60, 0.8),
+  'aplicaciones-procesadores': () => `<rect x="60" y="30" width="170" height="210" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + [0, 1, 2, 3, 4].map(i => `<rect x="80" y="${56 + i * 30}" width="${[120, 100, 130, 90, 110][i]}" height="6" rx="3" fill="${PAL[i % 4]}"/>`).join('') + `<rect x="250" y="60" width="110" height="90" rx="6" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><line x1="250" y1="90" x2="360" y2="90" stroke="${INK}" stroke-width="2"/><line x1="250" y1="120" x2="360" y2="120" stroke="${INK}" stroke-width="2"/><line x1="296" y1="60" x2="296" y2="150" stroke="${INK}" stroke-width="2"/>` + P(300, 200, 0.9, '#ffc6de', 'smile', 'R'),
+  'atajos-word': () => [['Ctrl', 40], ['N', 120], ['O', 170], ['S', 220]].map((k, i) => `<rect x="${60 + i * 62}" y="200" width="54" height="44" rx="10" fill="${PAL[i % 4]}" stroke="${INK}" stroke-width="3"/>` + tx(87 + i * 62, 228, k[0], 13, 6)).join('') + P(200, 110, 1, '#d7b9f5', 'smile', 'both') + ic('sparkle', 320, 80, 0.9) + tx(200, 180, 'Ctrl + tecla', 12, 14),
+  'atajos-excel': () => `<rect x="50" y="40" width="220" height="150" rx="8" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + [0, 1, 2, 3].map(r => [0, 1, 2, 3].map(c => `<rect x="${50 + c * 55}" y="${40 + r * 37}" width="55" height="37" fill="none" stroke="${INK}" stroke-width="1.5"/>`).join('')).join('') + `<rect x="105" y="77" width="55" height="37" fill="#fff3b8" stroke="${INK}" stroke-width="2.5"/>` + P(320, 190, 0.9, '#d9f5e7', 'smile', 'R') + ic('check', 320, 80, 1) + tx(170, 236, 'Ctrl + W · Alt + Intro', 12, 30),
+  presentaciones: () => `<rect x="50" y="36" width="220" height="150" rx="12" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/><rect x="120" y="186" width="8" height="30" fill="${INK}"/><rect x="90" y="212" width="70" height="8" rx="4" fill="${INK}"/>` + [0, 1, 2].map(i => `<rect x="${72 + i * 0}" y="${60 + i * 28}" width="${[90, 130, 110][i]}" height="6" rx="3" fill="${PAL[i]}"/>`).join('') + P(320, 180, 1, '#d7b9f5', 'open', 'R') + ic('star', 200, 210, 0.8) + tx(320, 240, 'exponer', 12, 10),
+  powerpoint: () => `<rect x="50" y="46" width="200" height="130" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + [0, 1, 2].map(i => `<rect x="${64 + i * 0}" y="${68 + i * 22}" width="${[120, 90, 150][i]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + `<rect x="170" y="110" width="60" height="50" fill="#d9f5e7" stroke="${INK}" stroke-width="2"/>` + P(320, 190, 0.9, '#cfe8ff', 'smile', 'R') + ic('pencil', 270, 170, 0.8, -30) + tx(150, 236, 'diapositivas', 12, 16),
+  prezi: () => `<circle cx="200" cy="140" r="110" fill="#ffffff" stroke="${INK}" stroke-width="3" stroke-dasharray="5 6"/>` + [[120, 110], [280, 110], [200, 190]].map((p, i) => `<rect x="${p[0] - 36}" y="${p[1] - 22}" width="72" height="44" rx="8" fill="${PAL[i + 1]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + `<path d="M156,110 L244,110 M200,132 L200,168" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 4"/>` + ic('lupa', 330, 60, 1) + P(60, 220, 0.6, '#ffc6de', 'smile', 'R'),
+  canva: () => `<path d="M200,40 C290,30 350,90 340,150 C330,210 250,230 210,200 C180,176 240,160 220,130 C200,100 120,90 200,40Z" fill="#fff3b8" stroke="${INK}" stroke-width="3"/>` + [[260, 90, '#ffc6de'], [290, 150, '#cfe8ff'], [230, 170, '#d9f5e7'], [150, 80, '#d7b9f5']].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="${p[2]}" stroke="${INK}" stroke-width="2"/>`).join('') + P(90, 190, 0.9, '#ffc6de', 'smile', 'R') + ic('pencil', 120, 150, 0.9, 30) + ic('flower', 330, 230, 0.7),
+  colaborativo: () => P(90, 180, 0.8, '#ffc6de', 'smile', 'none') + P(310, 180, 0.8, '#cfe8ff', 'open', 'none') + P(200, 200, 0.8, '#d9f5e7', 'smile', 'none') + `<rect x="150" y="60" width="100" height="70" rx="8" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + [0, 1].map(i => `<rect x="162" y="${76 + i * 18}" width="${[70, 50][i]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + burbuja(20, 40, 110, 36, '¡Lo veo!', '#ffffff') + ic('cloud', 300, 60, 0.8),
+  copilot: () => `<rect x="130" y="110" width="140" height="110" rx="26" fill="#cfe8ff" stroke="${INK}" stroke-width="3"/><circle cx="170" cy="150" r="10" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><circle cx="230" cy="150" r="10" fill="#ffffff" stroke="${INK}" stroke-width="2.5"/><path d="M180,186 Q200,198 220,186" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><line x1="200" y1="110" x2="200" y2="84" stroke="${INK}" stroke-width="3"/>` + ic('sparkle', 200, 74, 0.9) + burbuja(20, 40, 130, 40, 'Te ayudo', '#ffffff') + ic('heart', 340, 220, 0.8),
+  gemini: () => ic('sparkle', 200, 110, 1.6) + P(90, 190, 0.9, '#d7b9f5', 'smile', 'R') + burbuja(230, 170, 130, 40, '¿Qué es…?', '#ffffff') + burbuja(20, 40, 140, 40, 'Te explico', '#ffffff') + ic('bulb', 330, 60, 0.9),
+  'ia-responsable': () => `<line x1="200" y1="60" x2="200" y2="200" stroke="${INK}" stroke-width="4"/><line x1="110" y1="90" x2="290" y2="90" stroke="${INK}" stroke-width="4"/><path d="M90,90 L70,140 L110,140Z" fill="#d9f5e7" stroke="${INK}" stroke-width="2.5"/><path d="M310,90 L290,140 L330,140Z" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/>` + ic('check', 90, 170, 1) + ic('warn', 310, 170, 1) + P(200, 240, 0.4, '#fff3b8', 'smile', 'none') + tx(200, 260, 'verificar · citar · ética', 11, 30)
+};
+function escena(t) {
+  const un = UNIDADES[t.u];
+  const fn = ESC[t.id];
+  const inner = fn ? fn() : '';
+  return `<svg viewBox="0 0 400 280" style="width:100%;height:auto" role="img" aria-label="Dibujo del tema ${t.t}"><defs><filter id="stk" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feFlood flood-color="#ffffff"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="280" rx="18" fill="${un.c}"/><rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="2 8"/>${brillo(372, 22, 0.8)}${brillo(28, 260, 0.8)}${inner}</svg>`;
+}
+
+/* ---------- segundo dibujo por tema (estilo kawaii) ---------- */
+KI.globe = () => `<circle cx="0" cy="0" r="18" fill="#cfe8ff" stroke="${INK}" stroke-width="2.5"/><ellipse cx="0" cy="0" rx="8" ry="18" fill="none" stroke="${INK}" stroke-width="2"/><line x1="-18" y1="0" x2="18" y2="0" stroke="${INK}" stroke-width="2"/>`;
+KI.warn = () => `<path d="M0,-20 L22,16 L-22,16Z" fill="#fff3b8" stroke="${INK}" stroke-width="2.5" stroke-linejoin="round"/><line x1="0" y1="-6" x2="0" y2="5" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><circle cx="0" cy="10" r="2.5" fill="${INK}"/>`;
+const ESC2 = {
+  comunicacion: () => P(80, 172, 0.9, '#ffc6de', 'smile', 'R') + ic('phone', 200, 130, 1.4, -10) + P(320, 172, 0.9, '#d9f5e7', 'open', 'L') + `<path d="M130,150 Q200,190 270,150" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="6 6"/>` + tx(200, 232, 'el canal', 12, 14) + brillo(200, 70, 0.9),
+  expresion: () => P(200, 180, 1, '#fff3b8', 'open', 'both') + ic('rainbow', 200, 70, 1.2) + ic('note', 80, 96, 0.9, -10) + ic('note', 320, 104, 0.9, 10) + ic('heart', 200, 240, 0.8),
+  lenguaje: () => ic('warn', 80, 120, 1) + ic('speech', 200, 90, 1.3) + ic('bulb', 320, 120, 1) + ic('book', 200, 200, 1.1) + tx(200, 252, 'signos que comunican', 12, 26),
+  funciones: () => P(70, 190, 0.8, '#ffc6de', 'smile', 'none') + burbuja(16, 120, 110, 36, '¡Haz esto!', '#ffffff') + P(200, 200, 0.8, '#d7b9f5', 'open', 'none') + burbuja(138, 74, 124, 36, '¡Qué lindo!', '#ffffff') + P(330, 190, 0.8, '#d9f5e7', 'smile', 'none') + burbuja(262, 120, 124, 36, 'Hoy hace sol', '#ffffff'),
+  verbal: () => ic('envelope', 120, 140, 1.4) + ic('pencil', 230, 140, 1.2, 20) + ic('heart', 300, 80, 0.9) + P(330, 200, 0.8, '#d7b9f5', 'smile', 'none') + tx(120, 224, 'escrito', 12, 14),
+  'noverbal-lenguaje': () => P(100, 180, 0.9, '#ffc6de', 'smile', 'R') + P(300, 180, 0.9, '#d9f5e7', 'smile', 'L') + ic('mug', 200, 200, 1) + ic('heart', 200, 130, 1),
+  registros: () => P(80, 200, 0.7, '#d7b9f5', 'flat', 'none') + P(200, 190, 0.8, '#ffc6de', 'smile', 'none') + P(320, 180, 0.9, '#d9f5e7', 'smile', 'R') + tx(80, 240, 'formal', 11, 10) + tx(200, 240, 'neutro', 11, 10) + tx(320, 240, 'familiar', 11, 10),
+  redaccion: () => caja(40, 200, 100, 30, 'Planear', '#ffc6de') + caja(150, 170, 100, 30, 'Escribir', '#d7b9f5') + caja(260, 140, 100, 30, 'Revisar', '#d9f5e7') + ic('check', 320, 80, 1.1),
+  resumen: () => ic('lupa', 130, 120, 1.6) + [0, 1, 2].map(i => `<rect x="60" y="${190 + i * 14}" width="${[120, 90, 110][i]}" height="5" rx="2.5" fill="#d7b9f5"/>`).join('') + `<path d="M230,140 L290,140" stroke="${INK}" stroke-width="4" stroke-linecap="round"/><path d="M284,132 L298,140 L284,148Z" fill="${INK}"/>` + ic('note', 330, 140, 1.2),
+  sintesis: () => caja(40, 90, 110, 50, 'Fuente 1', '#ffc6de') + caja(250, 90, 110, 50, 'Fuente 2', '#cfe8ff') + caja(145, 170, 110, 50, 'Síntesis', '#fff3b8') + `<path d="M150,115 Q200,140 200,170 M250,115 Q200,140 200,170" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="6 5"/>`,
+  parafrasis: () => burbuja(20, 60, 160, 50, 'Es complejo', '#ffffff') + burbuja(220, 60, 160, 50, 'Dicho más simple', '#d9f5e7') + P(200, 210, 0.8, '#ffc6de', 'smile', 'both'),
+  argumento: () => caja(120, 200, 160, 32, 'Conclusión', '#d9f5e7') + caja(100, 160, 200, 32, 'Premisa 2', '#d7b9f5') + caja(80, 120, 240, 32, 'Premisa 1', '#ffc6de') + P(330, 150, 0.8, '#cfe8ff', 'smile', 'R'),
+  descripcion: () => ic('mug', 200, 140, 1.8) + caja(20, 60, 90, 28, 'Color', '#ffc6de') + caja(290, 60, 90, 28, 'Forma', '#d7b9f5') + caja(150, 232, 100, 28, 'Tamaño', '#cfe8ff'),
+  ensayo: () => ic('pencil', 140, 160, 1.4, -30) + ic('note', 240, 130, 1.8) + P(340, 200, 0.8, '#d9f5e7', 'smile', 'R'),
+  'estructura-ensayo': () => caja(120, 190, 160, 30, 'Conclusión', '#d9f5e7') + caja(120, 150, 160, 30, 'Desarrollo', '#d7b9f5') + caja(120, 110, 160, 30, 'Introducción', '#ffc6de') + P(200, 80, 0.6, '#fff3b8', 'smile', 'both'),
+  'caracteristicas-ensayo': () => P(120, 200, 0.9, '#cfe8ff', 'smile', 'L') + ic('bulb', 240, 120, 1.4) + ic('check', 330, 220, 0.8) + ic('sparkle', 300, 60, 0.9),
+  noverbal: () => P(120, 180, 1, '#ffc6de', 'smile', 'up') + ic('star', 280, 90, 1.2) + ic('heart', 320, 190, 0.9) + tx(120, 240, 'gesto abierto', 12, 16),
+  contacto: () => P(90, 170, 1, '#d7b9f5', 'smile', 'none') + P(310, 170, 1, '#fff3b8', 'open', 'none') + ic('sparkle', 200, 120, 1.2) + `<line x1="130" y1="120" x2="270" y2="120" stroke="${INK}" stroke-width="2.5" stroke-dasharray="5 6"/>`,
+  posturas: () => P(110, 170, 1, '#ffc6de', 'smile', 'up') + ic('star', 110, 80, 1) + P(290, 190, 1, '#d7b9f5', 'sad', 'none') + tx(290, 240, 'encorvada', 11, 14),
+  gestos: () => P(200, 190, 1, '#cfe8ff', 'smile', 'both') + burbuja(100, 40, 200, 40, '¡Así, mira!', '#ffffff') + ic('heart', 320, 240, 0.8),
+  facial: () => `<circle cx="200" cy="140" r="52" fill="#ffffff" stroke="${INK}" stroke-width="3"/><circle cx="182" cy="128" r="5" fill="${INK}"/><circle cx="218" cy="128" r="5" fill="${INK}"/><circle cx="170" cy="150" r="7" fill="#ffc6de"/><circle cx="230" cy="150" r="7" fill="#ffc6de"/><path d="M180,150 Q200,172 220,150" fill="none" stroke="${INK}" stroke-width="3"/>` + ic('sparkle', 80, 90, 1) + ic('sparkle', 330, 90, 1) + ic('heart', 330, 210, 0.9),
+  factual: () => ic('lupa', 210, 130, 1.8) + caja(40, 200, 120, 32, 'Fuente', '#d9f5e7') + caja(240, 200, 120, 32, 'Fecha', '#cfe8ff') + ic('check', 80, 100, 1),
+  paralinguistica: () => ic('mic', 200, 130, 2.2) + `<path d="M120,100 Q100,130 120,160 M96,86 Q70,130 96,174 M280,100 Q300,130 280,160 M304,86 Q330,130 304,174" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,
+  'funciones-voz': () => P(200, 190, 1, '#ffc6de', 'open', 'R') + burbuja(60, 40, 140, 40, '¡Te convenzo!', '#ffffff') + ic('star', 330, 120, 1),
+  'caracteristicas-voz': () => ic('headphones', 200, 110, 2) + `<path d="M80,200 Q120,170 160,200 Q200,230 240,200 Q280,170 320,200" fill="none" stroke="${INK}" stroke-width="4"/>` + tx(200, 252, 'intensidad y timbre', 12, 24),
+  articulacion: () => P(120, 180, 1.1, '#ffc6de', 'open', 'none') + caja(230, 60, 50, 40, 'M', '#ffc6de') + caja(290, 110, 50, 40, 'A', '#d7b9f5') + caja(230, 160, 50, 40, 'P', '#cfe8ff'),
+  nivel: () => `<rect x="40" y="200" width="100" height="40" rx="6" fill="#ffc6de" stroke="${INK}" stroke-width="2.5"/><rect x="140" y="160" width="100" height="80" rx="6" fill="#d7b9f5" stroke="${INK}" stroke-width="2.5"/><rect x="240" y="120" width="100" height="120" rx="6" fill="#d9f5e7" stroke="${INK}" stroke-width="2.5"/>` + tx(90, 226, 'general', 11, 10) + tx(190, 200, 'medio', 11, 10) + tx(290, 170, 'especializada', 11, 10) + ic('star', 300, 70, 1),
+  cobertura: () => ic('globe', 200, 130, 3) + ic('flower', 80, 80, 1) + ic('sun', 330, 80, 0.9) + ic('cloud', 90, 210, 1) + tx(200, 240, 'alcance de la búsqueda', 12, 20),
+  fuentes: () => ic('book', 120, 120, 1.5) + ic('note', 240, 130, 1.2) + ic('globe', 330, 200, 1) + tx(120, 200, 'primaria', 11, 12) + tx(240, 180, 'secundaria', 11, 12) + tx(330, 232, 'terciaria', 11, 12),
+  estrategia: () => caja(40, 120, 90, 30, 'Palabras', '#ffc6de') + `<path d="M130,135 L156,135" stroke="${INK}" stroke-width="3"/>` + caja(160, 120, 90, 30, 'Operadores', '#d7b9f5') + `<path d="M250,135 L276,135" stroke="${INK}" stroke-width="3"/>` + caja(280, 120, 90, 30, 'Resultados', '#d9f5e7') + P(200, 220, 0.7, '#cfe8ff', 'smile', 'R') + ic('lupa', 290, 210, 0.9),
+  academico: () => `<rect x="40" y="150" width="320" height="8" rx="3" fill="${INK}"/>` + [0, 1, 2, 3, 4, 5].map(i => `<rect x="${52 + i * 50}" y="${102 + (i % 2) * 8}" width="34" height="46" rx="3" fill="${PAL[i % 4]}" stroke="${INK}" stroke-width="2"/>`).join('') + P(200, 230, 0.6, '#d9f5e7', 'smile', 'none'),
+  latindex: () => caja(60, 60, 120, 30, 'Revista 1', '#ffc6de') + caja(60, 100, 120, 30, 'Revista 2', '#d7b9f5') + caja(60, 140, 120, 30, 'Revista 3', '#cfe8ff') + ic('check', 280, 120, 1.4) + P(330, 215, 0.8, '#fff3b8', 'smile', 'R'),
+  scielo: () => ic('book', 200, 150, 2.2) + ic('flower', 80, 80, 1) + ic('sun', 330, 70, 0.9) + ic('heart', 80, 220, 0.8),
+  scopus: () => [0, 1, 2, 3].map(i => `<rect x="${60 + i * 60}" y="${190 - i * 25}" width="36" height="${50 + i * 25}" rx="4" fill="${PAL[i]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + ic('lupa', 300, 90, 1.4) + ic('check', 330, 210, 0.9),
+  operadores: () => caja(20, 120, 110, 40, 'AND', '#ffc6de') + caja(145, 120, 110, 40, 'OR', '#d7b9f5') + caja(270, 120, 110, 40, 'NOT', '#cfe8ff') + ic('check', 75, 200, 1) + ic('sparkle', 200, 200, 1) + ic('warn', 325, 200, 1),
+  procesadores: () => `<rect x="110" y="60" width="150" height="180" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + [0, 1, 2, 3].map(i => `<rect x="126" y="${84 + i * 24}" width="${[110, 80, 120, 70][i]}" height="5" rx="2.5" fill="#ffc6de"/>`).join('') + ic('pencil', 290, 150, 1.2, 20) + ic('bulb', 60, 120, 1),
+  'aplicaciones-procesadores': () => [0, 1].map(r => [0, 1].map(c => caja(60 + c * 150, 60 + r * 90, 120, 70, ['Índice', 'Tabla', 'Plantilla', 'Estilos'][r * 2 + c], PAL[(r * 2 + c) % 4])).join('')).join(''),
+  'atajos-word': () => caja(100, 120, 80, 50, 'Ctrl', '#ffc6de') + caja(220, 120, 80, 50, 'S', '#d7b9f5') + P(330, 190, 0.8, '#cfe8ff', 'smile', 'R') + ic('sparkle', 200, 200, 0.8),
+  'atajos-excel': () => [0, 1, 2].map(r => [0, 1, 2].map(c => `<rect x="${80 + c * 70}" y="${70 + r * 46}" width="70" height="46" fill="#ffffff" stroke="${INK}" stroke-width="2"/>`).join('')).join('') + ic('check', 150, 100, 0.9) + ic('check', 290, 194, 0.9) + P(330, 230, 0.6, '#d9f5e7', 'smile', 'none'),
+  presentaciones: () => `<rect x="60" y="50" width="280" height="110" rx="10" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + ic('bulb', 200, 105, 1.2) + P(90, 220, 0.6, '#ffc6de', 'smile', 'none') + P(200, 224, 0.6, '#d7b9f5', 'smile', 'none') + P(310, 220, 0.6, '#d9f5e7', 'smile', 'none'),
+  powerpoint: () => [0, 1, 2].map(i => `<rect x="${40 + i * 115}" y="110" width="90" height="60" rx="6" fill="${PAL[i]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + `<path d="M135,140 L150,140 M250,140 L265,140" stroke="${INK}" stroke-width="3"/>` + ic('star', 200, 60, 1) + tx(200, 220, 'orden de las diapositivas', 12, 26),
+  prezi: () => `<path d="M60,150 Q120,90 160,110 T280,160 T360,110" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="6 6"/>` + [[60, 150], [160, 110], [280, 160], [360, 110]].map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="14" fill="${PAL[i + 1]}" stroke="${INK}" stroke-width="2.5"/>`).join('') + ic('lupa', 200, 220, 1.1),
+  canva: () => `<rect x="90" y="50" width="220" height="150" rx="16" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>` + [0, 1, 2, 3].map(i => `<circle cx="${130 + i * 45}" cy="100" r="14" fill="${PAL[i]}" stroke="${INK}" stroke-width="2"/>`).join('') + ic('heart', 200, 160, 1.4) + ic('star', 280, 180, 0.9),
+  colaborativo: () => ic('cloud', 200, 90, 2.2) + P(140, 200, 0.7, '#ffc6de', 'smile', 'none') + P(260, 200, 0.7, '#d9f5e7', 'open', 'none') + ic('pencil', 200, 210, 0.9, -40),
+  copilot: () => ic('sparkle', 90, 90, 1) + ic('note', 310, 180, 1.4) + P(200, 190, 1, '#cfe8ff', 'smile', 'none') + burbuja(60, 40, 160, 40, 'Redacto contigo', '#ffffff'),
+  gemini: () => burbuja(20, 60, 130, 40, '¿Cómo?', '#ffffff') + burbuja(230, 140, 140, 40, 'Paso a paso', '#d9f5e7') + ic('sparkle', 200, 40, 1),
+  'ia-responsable': () => caja(100, 60, 200, 36, 'Verificar fuentes', '#d9f5e7') + caja(100, 110, 200, 36, 'Citar la IA', '#d7b9f5') + caja(100, 160, 200, 36, 'Ser honesto', '#ffc6de') + ic('check', 80, 78, 0.8) + ic('check', 80, 128, 0.8) + ic('check', 80, 178, 0.8) + P(330, 230, 0.6, '#fff3b8', 'smile', 'none')
+};
+function escena2(t) {
+  const un = UNIDADES[t.u];
+  const fn = ESC2[t.id];
+  return `<svg viewBox="0 0 400 280" style="width:100%;height:auto" role="img" aria-label="Dibujo adicional del tema ${t.t}"><defs><filter id="stk" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feFlood flood-color="#ffffff"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="400" height="280" rx="18" fill="${un.c}"/><rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="2 8"/>${fn ? fn() : ''}</svg>`;
+}
+
+/* ---------- dibujos adicionales por tema (se ubican en distintas secciones) ---------- */
+const FILTRO_STK = '<filter id="stk" x="-30%" y="-30%" width="160%" height="160%"><feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feFlood flood-color="#ffffff"/><feComposite in2="d" operator="in" result="w"/><feMerge><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+function svgTema(t, inner, etiqueta) {
+  return `<svg viewBox="0 0 400 280" style="width:100%;max-width:260px;height:auto;display:block;margin:0 auto" role="img" aria-label="${etiqueta} ${t.t}"><defs>${FILTRO_STK}</defs><rect width="400" height="280" rx="18" fill="${UNIDADES[t.u].c}"/><rect x="8" y="8" width="384" height="264" rx="14" fill="none" stroke="${INK}" stroke-width="2.5" stroke-dasharray="2 8"/>${inner}</svg>`;
+}
+function iconosTema(t) { return (SIL[t.id] || ['star', 'heart', 'cloud', 'sparkle', 'star', 'heart', 'cloud', 'sparkle']); }
+function dibujoBurbujas(t) {
+  const b = (AMP[t.id] ? AMP[t.id][1] : []).map(corto), ic8 = iconosTema(t);
+  const pos = [[14, 30], [226, 30], [14, 118], [226, 118]];
+  const burbujas = pos.slice(0, b.length).map((p, i) => burbuja(p[0], p[1], 160, 44, b[i], i % 2 ? '#d9f5e7' : '#ffffff')).join('');
+  return svgTema(t, burbujas + P(200, 236, 0.75, PAL[(t.u + 1) % PAL.length], 'smile', 'both') + ic(ic8[0], 56, 220, 0.9, -8) + ic(ic8[1], 344, 220, 0.9, 8) + brillo(200, 14, 0.7), 'Dibujo del tema');
+}
+function dibujoCadena(t) {
+  const nombres = (t.c || []).map(c => c[0]).slice(0, 3), ic8 = iconosTema(t);
+  let s = caja(110, 10, 180, 36, t.t, '#ffffff');
+  nombres.forEach((n, i) => {
+    const x = 22 + i * 128;
+    s += ic(ic8[i], x + 50, 104, 1.1, (i - 1) * 6) + `<rect x="${x}" y="140" width="100" height="62" rx="14" fill="${PAL[i % PAL.length]}" stroke="${INK}" stroke-width="2.5"/>` + tx(x + 50, 171, n, 12, 11);
+    if (i < nombres.length - 1) s += `<path d="M${x + 104},171 L${x + 120},171" stroke="${INK}" stroke-width="3"/><path d="M${x + 118},165 L${x + 126},171 L${x + 118},177Z" fill="${INK}"/>`;
+  });
+  return svgTema(t, s + brillo(360, 230, 0.8) + brillo(36, 236, 0.7), 'Dibujo de conceptos del tema');
+}
+function dibujoConstelacion(t) {
+  const ic8 = iconosTema(t);
+  const pos = [[70, 84], [200, 58], [330, 86], [62, 200], [200, 226], [338, 198]];
+  const lineas = pos.map(p => `<line x1="200" y1="140" x2="${p[0]}" y2="${p[1]}" stroke="${INK}" stroke-width="2" stroke-dasharray="5 6"/>`).join('');
+  const iconos = pos.map((p, i) => ic(ic8[i % ic8.length], p[0], p[1], 1 + (i % 2) * 0.15, (i % 3) * 8 - 8)).join('');
+  return svgTema(t, lineas + `<rect x="110" y="118" width="180" height="44" rx="22" fill="#ffffff" stroke="${INK}" stroke-width="3"/>` + tx(200, 140, t.t, 13, 16) + iconos, 'Mapa visual del tema');
+}
+
+/* ---------- ventana con más información al hacer clic en un dibujo ---------- */
+function contenidoDib(t, k) {
+  const un = UNIDADES[t.u], am = AMP[t.id] || ['', []];
+  const busq = `https://www.youtube.com/results?search_query=${encodeURIComponent(t.t + ' ' + un.s)}`;
+  if (k === 1) return { titulo: 'Idea general: ' + t.t, html: `<p>${t.intro}</p><p>${am[0]}</p><p><b>${un.n}:</b> ${un.s}</p>` };
+  if (k === 2) return { titulo: 'Puntos clave: ' + t.t, html: `<ul>${am[1].map(b => `<li>${b}</li>`).join('')}</ul>` };
+  if (k === 3) return { titulo: 'Conceptos en detalle: ' + t.t, html: t.c.map(c => `<p><b>${c[0]}:</b> ${c[1]}</p>`).join('') };
+  if (k === 4) return { titulo: 'Fuentes para seguir leyendo', html: (FUENTES[t.id] ? `<ul>${FUENTES[t.id].map(f => `<li><a href="${f[1]}" target="_blank" rel="noopener">📄 ${f[0]}</a></li>`).join('')}</ul>` : '<p>Aún no hay fuentes para este tema.</p>') + `<a class="btn mint sm" target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=${encodeURIComponent(t.t + ' ' + un.s)}">🎓 Buscar artículos</a>` };
+  return { titulo: 'Palabras clave y video: ' + t.t, html: `<p>${t.c.map(c => c[0]).join(' · ')}</p><p>${t.vid ? `🎬 <a href="https://www.youtube.com/watch?v=${t.vid}" target="_blank" rel="noopener">${t.vidT}</a>` : `🎬 <a href="${busq}" target="_blank" rel="noopener">Buscar video sobre este tema</a>`}</p>` };
+}
+function abrirDib(id, k) {
+  const t = TEMAS.find(x => x.id === id); if (!t) return;
+  let o = document.getElementById('dib-over');
+  if (!o) { o = document.createElement('div'); o.id = 'dib-over'; o.className = 'dib-over'; o.innerHTML = '<div class="dib-box" role="dialog" aria-modal="true"><span class="dib-deco d1">✿</span><span class="dib-deco d2">★</span><span class="dib-deco d3">♡</span><span class="dib-deco d4">✦</span><button class="dib-x" aria-label="Cerrar">✕</button><div class="dib-c"></div></div>'; document.body.appendChild(o);
+    o.addEventListener('click', e => { if (e.target === o || e.target.classList.contains('dib-x')) o.classList.remove('on'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') o.classList.remove('on'); }); }
+  const c = contenidoDib(t, k);
+  const box = o.querySelector('.dib-box');
+  box.style.setProperty('--c', UNIDADES[t.u].c);
+  const etiquetas = ['Idea general', 'Puntos clave', 'Conceptos', 'Fuentes', 'Video y palabras clave'];
+  const un = UNIDADES[t.u], ic8 = iconosTema(t);
+  const banner = `<svg class="dib-banner" viewBox="0 0 400 96" role="img" aria-label="Decoración del tema"><defs>${FILTRO_STK}</defs><rect width="400" height="96" fill="${un.c}"/><rect x="7" y="7" width="386" height="82" rx="12" fill="none" stroke="${INK}" stroke-width="2" stroke-dasharray="2 7"/>${ic(ic8[0], 48, 50, 0.85, -8)}${ic(ic8[1], 110, 30, 0.75, 6)}${ic(ic8[2], 290, 30, 0.75, -6)}${ic(ic8[3], 352, 50, 0.85, 8)}${brillo(200, 20, 0.7)}${brillo(150, 72, 0.5)}${brillo(250, 72, 0.5)}${P(200, 92, 0.34, PAL[(t.u + 2) % PAL.length], 'smile', 'both')}</svg>`;
+  o.querySelector('.dib-c').innerHTML = `${banner}<div class="dib-head"><div class="dib-ico">${t.i}</div><div><div class="dib-tag">${UNIDADES[t.u].n} · dibujo ${k} de 5 · ${etiquetas[k - 1]}</div><h3>${t.t}</h3></div></div><div class="dib-body">${c.html}</div><div class="dib-pie">✿ sigue explorando este tema ✿</div>`;
+  o.classList.add('on');
+}
+document.addEventListener('click', e => { const el = e.target.closest('[data-dib]'); if (!el) return; const [id, k] = el.dataset.dib.split('|'); abrirDib(id, +k); });
+
+/* ---------- portada de datos (inicio) ---------- */
+function inicioDatos() {
+  const filas = [['🏛️', 'Universidad Técnica de Ambato'], ['🎓', 'Facultad de Contabilidad y Auditoría'], ['👩‍🎓', 'Santos Alejandra · Primero "C"']];
+  const cols = ['#ffc6de', '#d7b9f5', '#cfe8ff'];
+  const filasH = filas.map((f, i) => `<div class="drow" style="background:${cols[i]};transform:rotate(${i % 2 ? 0.7 : -0.7}deg)"><span class="dico">${f[0]}</span><span>${f[1]}</span></div>`).join('');
+  const dsvg = `<svg class="dsvg" viewBox="0 0 260 150" role="img" aria-label="Personaje de bienvenida"><rect x="2" y="2" width="256" height="146" rx="18" fill="#fff3fa" stroke="${INK}" stroke-width="2.5"/><rect x="10" y="10" width="240" height="130" rx="12" fill="none" stroke="${INK}" stroke-width="1.5" stroke-dasharray="2 6"/><defs>${FILTRO_STK}</defs>${ic('heart', 42, 44, 1, -8)}${ic('star', 218, 40, 1, 8)}${ic('book', 46, 112, 0.9, -6)}${ic('bulb', 216, 108, 0.9, 6)}${brillo(130, 26, 0.9)}${P(130, 128, 0.9, PAL[1], 'smile', 'both')}</svg>`;
+  return `<div class="datos">${filasH}</div><div class="dcol"><div class="bubble"><p>Elige un tema en el menú de la izquierda. En cada página puedes voltear las tarjetas, ver el video, revisar las fuentes y revisar los dibujos del tema. Marca cada tema con el corazón ♥ para llevar tu avance.</p></div>${dsvg}<div class="stats"><div class="stat s2" style="background:#d7b9f5"><b>${UNIDADES.length}</b><small>unidades</small></div></div></div>`;
+}
+
+/* ---------- barra lateral ---------- */
+function buildLista() {
+  const f = filtroActual();
+  const cur = location.hash.slice(1);
+  let h = '';
+  UNIDADES.forEach((un, ui) => {
+    let items = '';
+    TEMAS.forEach(t => {
+      if (t.u !== ui) return;
+      if (f && !(t.t + ' ' + t.intro).toLowerCase().includes(f)) return;
+      items += `<a href="#${t.id}" class="${cur === t.id ? 'act' : ''}">${t.i} ${t.t}<span class="ok">${estudiado(t.id) ? '♥' : ''}</span></a>`;
+    });
+    if (!f) items += `<a href="#quiz-${ui}" class="${cur === 'quiz-' + ui ? 'act' : ''}">🧠 Quiz de la unidad</a>`;
+    if (items) h += `<div><div class="u-tit"><i style="background:${un.c}"></i>${un.n}</div>${items}</div>`;
+  });
+  $('#lista').innerHTML = h;
+}
+
+/* ---------- vistas ---------- */
+function chrome(addr, extra) {
+  return `<div class="chrome">
+    <button id="c-atras" title="Anterior">‹</button>
+    <button id="c-adelante" title="Siguiente">›</button>
+    <button id="c-recargar" title="Recargar">↻</button>
+    <div class="addr">${addr}</div>
+    ${extra || ''}
+  </div>`;
+}
+
+function vInicio() {
+  const cards = UNIDADES.map((un, ui) => {
+    const primero = TEMAS.find(t => t.u === ui);
+    const total = TEMAS.filter(t => t.u === ui).length;
+    return `<a class="u-card" style="--c:${un.c}" href="#${primero.id}"><span class="folder-tab"></span><h3>${un.n}</h3><p>${un.s}</p><p style="margin-top:8px;font-weight:700">${total} temas ♡</p></a>`;
+  }).join('');
+  const stk = (name, pos, rot, bg) => `<div class="stk" style="${pos};transform:rotate(${rot}deg);background:${bg}"><svg viewBox="-30 -30 60 60" aria-hidden="true">${ic(name, 0, 0, 1, 0)}</svg></div>`;
+  const stickers = [
+    stk('heart', 'left:-16px;top:26px', -8, '#ffffff'),
+    stk('sparkle', 'left:-12px;bottom:44px', 6, '#fff3b8'),
+    stk('cloud', 'left:34px;bottom:-14px', -4, '#cfe8ff'),
+    stk('star', 'right:-14px;top:40px', 8, '#ffffff'),
+    stk('bulb', 'right:-12px;bottom:64px', -6, '#d9f5e7'),
+    stk('butterfly', 'right:30px;top:-16px', 4, '#ffffff')
+  ].join('');
+  return `
+  <div class="pw">
+    ${stickers}
+    <div class="bw">
+      <div class="bw-top"><div class="dots"><span></span><span></span><span></span></div><div class="bw-tab">♡ portafolio-tic.html</div></div>
+      ${chrome('portafolio-tic.html#inicio')}
+      <div class="bw-body">
+        <h1 class="bw-title">♡ PORTAFOLIO TIC ♡</h1>
+        <div class="bw-grid">
+          <div>
+            <div class="bw-frame">${dibujo({ id: 'inicio', i: '🌈', t: 'Santos Alejandra' }, '#ecdcff')}</div>
+            <p style="margin:16px 0 0;text-align:center"><a class="btn" href="#${TEMAS[0].id}">▶ Empezar</a></p>
+          </div>
+          <div>
+            <span class="chip">Tecnologías de la Información y Comunicación</span>
+            <h2 style="font-family:'Fredoka',sans-serif;margin:4px 0 8px;font-size:1.3rem">Todos los temas del semestre 🌸</h2>
+            <p style="margin:0 0 12px;font-size:.95rem">Contenidos, dibujos, videos, artículos científicos y la bibliografía al final.</p>
+            <div class="cover" style="grid-template-columns:1fr;gap:14px">${inicioDatos()}</div>
+          </div>
+        </div>
+      </div>
+      <div class="bw-foot"><span>⌕ portafolio de Santos Alejandra</span><span>Primero "C" · TIC</span></div>
+    </div>
+  </div>
+
+  <h2 style="font-family:'Fredoka',sans-serif;margin:8px 0 14px;font-size:1.4rem">Explora por carpeta</h2>
+  <div class="u-cards">${cards}</div>
+`;
+}
+
+function vTema(t) {
+  const ui = t.u, un = UNIDADES[ui];
+  const conceptos = (t.c || []).map(c => c[0]).slice(0, 4);
+  const idx = TEMAS.indexOf(t), prev = TEMAS[idx - 1], next = TEMAS[idx + 1];
+  const prevLink = (prev && prev.u === ui) ? `<a href="#${prev.id}">← ${prev.t}</a>` : '<span></span>';
+  const nextLink = (next && next.u === ui) ? `<a href="#${next.id}">${next.t} →</a>` : `<a href="#quiz-${ui}">Quiz de la unidad →</a>`;
+  const flips = t.c.map(c => `<div class="flip" style="--c:${un.c}" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="f-front">${c[0]}<span>toca para ver ✿</span></div><div class="f-back">${c[1]}</div></div></div>`).join('');
+  const fuentes = FUENTES[t.id] ? `<ul class="fuentes">${FUENTES[t.id].map(f => `<li><a href="${f[1]}" target="_blank" rel="noopener">📄 ${f[0]}</a></li>`).join('')}</ul>` : '';
+  return `
+  <div class="win">
+    <div class="win-bar"><div class="dots"><span></span><span></span><span></span></div>${un.n} — ${t.t}<button class="x-btn" onclick="location.hash='inicio'" title="Cerrar">×</button></div>
+    ${chrome('portafolio-tic.html#' + t.id, `<button class="heart-btn ${estudiado(t.id) ? 'on' : ''}" id="corazon" title="Marcar como estudiado">♥</button>`)}
+    <section class="hero" style="background:linear-gradient(160deg,#fff,${un.c})">
+      <div class="txt">
+        <span class="chip">${un.n} · ${un.s}</span>
+        <h1>${t.i} ${t.t}</h1>
+        <p>${t.intro}</p>
+      </div>
+      <div class="art" data-dib="${t.id}|1">${escena(t)}</div>
+    </section>
+  </div>
+
+  <div class="win"><div class="win-bar">📖 información ampliada</div><div class="win-body">
+    <p style="line-height:1.7;font-size:1.02rem">${AMP[t.id][0]}</p>
+    <ul style="line-height:1.7;padding-left:20px;margin-top:10px">${AMP[t.id][1].map(b => `<li>${b}</li>`).join('')}</ul>
+    <div class="dibs" style="margin-top:14px" data-dib="${t.id}|2">${dibujoBurbujas(t)}</div>
+  </div></div>
+
+  <div class="win"><div class="win-bar">🔗 idea central del tema</div><div class="win-body" data-dib="${t.id}|3">${dibujoCadena(t)}</div></div>
+
+  <div class="grid">
+    <div class="win"><div class="win-bar">🧩 conceptos clave</div><div class="win-body"><div class="flips">${flips}</div><p style="font-size:.85rem;color:var(--mut);margin-top:10px">Toca cada tarjeta para voltearla.</p></div></div>
+    <div class="win"><div class="win-bar">📚 fuentes del tema</div><div class="win-body">${fuentes || '<div class="vacio">Aún no hay fuentes para este tema. Usa el botón de abajo para buscar artículos.</div>'}<a class="btn mint sm" target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=${encodeURIComponent(t.t + ' ' + un.s)}">🎓 Buscar artículos</a></div></div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar">🎨 dibujos del tema</div>
+    <div class="win-body">
+      <div class="dibs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px" data-dib="${t.id}|4">${escena2(t)}</div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar">🎬 video del tema</div>
+    <div class="win-body">
+      <div id="video"></div>
+      <div class="acciones">
+        <input id="url-vid" placeholder="Pega otro enlace de YouTube (opcional)">
+        <button class="btn sm" id="guar-vid">Guardar video</button>
+        <a class="btn blue sm" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(t.t + ' ' + un.s)}">🔎 Buscar videos</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="win"><div class="win-bar">✨ mapa del tema</div><div class="win-body" data-dib="${t.id}|5">${dibujoConstelacion(t)}</div></div>
+
+  <div class="nav-tema">${prevLink}${nextLink}</div>`;
+}
+
+function vBibliografia() {
+  const porUnidad = UNIDADES.map((un, ui) => {
+    const items = TEMAS.filter(t => t.u === ui && FUENTES[t.id]).flatMap(t => FUENTES[t.id]);
+    const vistos = new Set();
+    const unicos = items.filter(f => !vistos.has(f[1]) && vistos.add(f[1]));
+    return `<div class="bib-group"><h3>${un.n}: ${un.s}</h3><ul class="bib-list">${unicos.map(f => `<li>${f[0]}. (s. f.). Recurso web. ${f[1]}</li>`).join('') || '<li>Sin fuentes registradas todavía.</li>'}</ul></div>`;
+  }).join('');
+  return `
+  <div class="win">
+    <div class="win-bar">📚 bibliografía — al final del portafolio</div>
+    <div class="win-body">
+      <p class="bib-note">Las entradas formales tienen autor y año cuando la búsqueda lo confirmó. Revisa cada una antes de entregar y ajusta el formato APA 7 según tu docente.</p>
+      <h3 style="font-family:'Fredoka',sans-serif;margin:8px 0">Fuentes formales</h3>
+      <ul class="bib-list">${BIB_FORMAL.map(b => `<li>${b}</li>`).join('')}</ul>
+      <h3 style="font-family:'Fredoka',sans-serif;margin:18px 0 8px">Videos usados</h3>
+      <ul class="bib-list">${VIDEOS_BIB.map(b => `<li>${b}</li>`).join('')}</ul>
+      ${porUnidad}
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar">✍️ mis referencias</div>
+    <div class="win-body">
+      <p class="bib-note">Escribe aquí tus propias referencias (se guardan en este navegador).</p>
+      <textarea class="mis-ref" id="mis-ref" placeholder="Autor, A. (año). Título. Editorial o revista. URL"></textarea>
+    </div>
+  </div>`;
+}
+
+function vQuiz(ui) {
+  const un = UNIDADES[ui];
+  const preguntas = QUIZ[ui].map((p, j) =>
+    `<div class="quiz-q"><p id="pq${j}">${j + 1}. ${p.q}</p>` +
+    p.o.map((o, k) => `<label><input type="radio" name="p${j}" value="${k}"> ${o}</label>`).join('') +
+    `</div>`).join('');
+  return `
+  <div class="win">
+    <div class="win-bar">🧠 quiz — ${un.n}</div>
+    ${chrome('portafolio-tic.html#quiz-' + ui)}
+    <div class="win-body">
+      <h2 style="font-size:1.5rem">${un.s}</h2>
+      <p style="margin-bottom:14px">Responde y revisa tus respuestas.</p>
+      ${preguntas}
+      <button class="btn" id="rev">Revisar respuestas</button>
+      <p class="res" id="res"></p>
+    </div>
+  </div>`;
+}
+
+const QUIZ = [
+  [
+    { q: '¿Qué elemento del proceso comunicativo codifica y origina el mensaje?', o: ['Receptor', 'Emisor', 'Canal'], r: 1 },
+    { q: '¿Qué es el feedback?', o: ['El retorno que confirma la comprensión', 'El ruido externo', 'El soporte físico del mensaje'], r: 0 },
+    { q: 'Según la diferencia entre lengua y habla, ¿cuál es el sistema social compartido?', o: ['Habla', 'Lengua', 'Dialecto'], r: 1 }
+  ],
+  [
+    { q: '¿Qué estudia la kinésica?', o: ['Movimientos corporales, gestos y posturas', 'Distancias entre personas', 'El tono de voz'], r: 0 },
+    { q: '¿Qué parámetros incluye la paralingüística?', o: ['Tono, ritmo y volumen', 'Colores y ropa', 'Solo palabras escritas'], r: 0 },
+    { q: 'Un dato factual es…', o: ['Verificable y comprobable', 'Una opinión personal', 'Un relato de ficción'], r: 0 }
+  ],
+  [
+    { q: '¿Qué operador booleano une sinónimos en una búsqueda?', o: ['AND', 'OR', 'NOT'], r: 1 },
+    { q: 'Las fuentes primarias son…', o: ['Compilaciones e índices', 'Información directa e inédita', 'Bibliotecas físicas'], r: 1 },
+    { q: '¿Qué caracteriza a SciELO?', o: ['Acceso abierto en texto completo', 'Es una base privada', 'Solo publica libros'], r: 0 }
+  ],
+  [
+    { q: '¿Qué herramienta de IA está integrada en Office?', o: ['Copilot', 'Canva', 'Prezi'], r: 0 },
+    { q: '¿Qué característica destaca de Prezi?', o: ['Navegación tipo zoom', 'Edición de audio', 'Hojas de cálculo'], r: 0 },
+    { q: '¿Para qué sirve el estilo APA?', o: ['Estructurar y formatear textos académicos', 'Diseñar logotipos', 'Medir la velocidad de internet'], r: 0 }
+  ]
+];
+
+/* ---------- eventos de cada vista ---------- */
+function attachChrome() {
+  const atras = $('#c-atras'), adel = $('#c-adelante'), rec = $('#c-recargar');
+  if (atras) atras.onclick = () => history.back();
+  if (adel) adel.onclick = () => history.forward();
+  if (rec) rec.onclick = () => render();
+}
+
+function attachTema(t) {
+  attachChrome();
+  function pintarVideo() {
+    const guardado = get('vid-' + t.id, '');
+    const id = ytId(guardado) || t.vid || '';
+    const titulo = guardado ? 'Video que guardaste' : (t.vidT ? 'Video encontrado: ' + t.vidT : '');
+    const q = encodeURIComponent(t.t + ' explicación');
+    const enlaceYT = id ? `https://www.youtube.com/watch?v=${id}` : `https://www.youtube.com/results?search_query=${q}`;
+    const caja = id
+      ? `<img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt="Portada del video del tema" style="width:100%;display:block">`
+      : `<div style="height:260px;display:grid;place-items:center;font-family:Fredoka,sans-serif;font-size:1.1rem;color:var(--ink);text-align:center;padding:20px">Haz clic para ver los videos de este tema en YouTube</div>`;
+    $('#video').innerHTML = `<a href="${enlaceYT}" target="_blank" rel="noopener" style="display:block;position:relative;border:3px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;text-decoration:none">${caja}<span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:#ff9ec6;border:3px solid var(--ink);display:grid;place-items:center;font-size:30px;color:var(--ink)">▶</span></a><div class="vidT">${id ? titulo : 'Videos encontrados en YouTube para este tema.'} · <a href="${enlaceYT}" target="_blank" rel="noopener">Abrir en YouTube ↗</a></div>`;
+  }
+  pintarVideo();
+  $('#guar-vid').onclick = () => {
+    const v = $('#url-vid').value.trim();
+    if (!ytId(v)) { alert('Ese enlace no parece de YouTube.'); return; }
+    set('vid-' + t.id, v);
+    $('#url-vid').value = '';
+    pintarVideo();
+  };
+
+  const corazon = $('#corazon');
+  corazon.onclick = () => {
+    const ya = !estudiado(t.id);
+    set('visto-' + t.id, ya ? '1' : '');
+    corazon.classList.toggle('on', ya);
+    progreso(); buildLista();
+  };
+}
+
+function attachQuiz(ui) {
+  attachChrome();
+  $('#rev').onclick = () => {
+    let aciertos = 0;
+    QUIZ[ui].forEach((p, j) => {
+      const sel = document.querySelector(`input[name="p${j}"]:checked`);
+      const ok = sel && parseInt(sel.value, 10) === p.r;
+      if (ok) aciertos++;
+      const txt = document.getElementById('pq' + j);
+      txt.classList.remove('okc', 'malc');
+      txt.classList.add(ok ? 'okc' : 'malc');
+    });
+    const total = QUIZ[ui].length;
+    $('#res').textContent = 'Tuviste ' + aciertos + ' de ' + total + ' correctas. ' +
+      (aciertos === total ? '¡Excelente! 🌸' : 'Repasa el tema y vuelve a intentar.');
+  };
+}
+
+function attachBib() {
+  attachChrome();
+  const ta = $('#mis-ref');
+  ta.value = get('mis-ref', '');
+  ta.oninput = () => set('mis-ref', ta.value);
+}
+
+/* ---------- enrutado ---------- */
+function render() {
+  const h = location.hash.slice(1) || 'inicio';
+  const t = TEMAS.find(x => x.id === h);
+  let html, after = () => {};
+  if (t) {
+    html = vTema(t); after = () => attachTema(t);
+  } else if (h === 'bibliografia') {
+    html = vBibliografia(); after = attachBib;
+  } else if (h.startsWith('quiz-') && QUIZ[parseInt(h.slice(5), 10)]) {
+    const ui = parseInt(h.slice(5), 10);
+    html = vQuiz(ui); after = () => attachQuiz(ui);
+  } else {
+    html = vInicio(); after = attachChrome;
+  }
+  $('#vista').innerHTML = html;
+  after();
+  buildLista();
+  progreso();
+  $('#side').classList.remove('abierto');
+  window.scrollTo(0, 0);
+}
+
+function irTema(delta) {
+  const cur = location.hash.slice(1);
+  const idx = TEMAS.findIndex(t => t.id === cur);
+  const nuevo = TEMAS[idx + delta];
+  if (nuevo) location.hash = nuevo.id;
+  else if (delta > 0) location.hash = 'bibliografia';
+}
+
+/* ---------- arranque ---------- */
+$('#buscar').addEventListener('input', buildLista);
+$('#menu-btn').onclick = () => $('#side').classList.toggle('abierto');
+$('#prev').onclick = () => irTema(-1);
+$('#next').onclick = () => irTema(1);
+$('#marcar').onclick = () => {
+  const cur = TEMAS.find(t => t.id === location.hash.slice(1));
+  if (!cur) return;
+  set('visto-' + cur.id, estudiado(cur.id) ? '' : '1');
+  progreso(); buildLista();
+};
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
